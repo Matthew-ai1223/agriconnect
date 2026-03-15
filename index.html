@@ -43,7 +43,7 @@
             <a href="#" onclick="showSection('home'); return false;">Home</a>
             <a href="#" onclick="showSection('ai-chat'); return false;">Ask AI</a>
             <a href="#" onclick="showSection('market'); return false;">Shop</a>
-            <a href="#" onclick="showSection('consult'); return false;">Consult Vets</a>
+            <a href="#" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;">Consult Vets</a>
         </nav>
         <div class="user-actions">
             <button class="btn btn-icon" id="profile-btn" onclick="showSection('auth')" aria-label="User Profile">
@@ -101,11 +101,6 @@
             <div class="product-grid" id="market-list">
                 <!-- Market items injected JS -->
             </div>
-        </section>
-
-        <!-- CONSULT SECTION -->
-        <section id="consult" class="d-none full-height-section">
-            <iframe src="http://agriconnect.gt.tc/" class="app-iframe" title="Veterinary Consultation"></iframe>
         </section>
 
         <!-- AUTH SECTION -->
@@ -208,7 +203,7 @@
             </svg>
             Shop
         </a>
-        <a href="#" class="nav-item" onclick="showSection('consult'); return false;" id="nav-consult">
+        <a href="#" class="nav-item" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;" id="nav-consult">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
