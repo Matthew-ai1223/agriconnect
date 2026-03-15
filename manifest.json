@@ -1,6 +1,6 @@
 {
-  "name": "AgriConnect Farm Assistant",
-  "short_name": "AgriConnect",
+  "name": "MyFarmAI",
+  "short_name": "MyFarmAI",
   "id": "/",
   "start_url": "./index.html",
   "scope": "./",
