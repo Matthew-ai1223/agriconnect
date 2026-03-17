@@ -3,11 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>MyFarmAI - AI Farm Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>MyFarmAI - Premium AI Farm Assistant</title>
     <meta name="description" content="AI-powered farming assistant, marketplace, and veterinary consultation platform.">
-    <meta name="theme-color" content="#16a34a">
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#10B981">
 
     <!-- PWA Icons & Android Support -->
     <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
@@ -24,32 +23,43 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Main Style -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <!-- SVG Defs for Gradients -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10B981" />
+                <stop offset="100%" stop-color="#059669" />
+            </linearGradient>
+        </defs>
+    </svg>
 
     <!-- Header -->
     <header class="header">
         <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.77 10.3-8 10z"></path>
                 <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
             </svg>
             MyFarmAI
         </div>
         <nav class="desktop-nav">
-            <a href="#" onclick="showSection('home'); return false;">Home</a>
-            <a href="#" onclick="showSection('ai-chat'); return false;">Ask AI</a>
-            <a href="#" onclick="showSection('market'); return false;">Shop</a>
-            <a href="#" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;">Consult Vets</a>
+            <a href="#" class="active" onclick="showSection('home'); return false;">Overview</a>
+            <a href="#" onclick="showSection('ai-chat'); return false;">AI Assistant</a>
+            <a href="#" onclick="showSection('market'); return false;">Marketplace</a>
+            <a href="#" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;">Vet Connect</a>
         </nav>
         <div class="user-actions">
             <button class="btn btn-icon" id="profile-btn" onclick="showSection('auth')" aria-label="User Profile">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                 </svg>
@@ -61,56 +71,86 @@
     <main id="app-content" class="container">
 
         <!-- HOME SECTION -->
-        <section id="home" class="active-section" style="padding-bottom: 2rem;">
-            <div class="hero-card card" style="text-align: center; background: linear-gradient(135deg, #16a34a, #10b981); color: white; padding: 2rem 1rem; border-radius: 16px; margin-bottom: 2rem; border: none;">
-                <h1 style="color: white; font-size: 2rem; margin-bottom: 0.5rem;">Welcome to MyFarmAI</h1>
-                <p class="hero-text" style="color: rgba(255,255,255,0.9); margin-bottom: 0; max-width: 400px; margin-inline: auto;">Your all-in-one AI-powered farming ecosystem. Select a service to get started.</p>
+        <section id="home" class="active-section">
+            <div class="hero-card">
+                <h1>Farm Smarter, Not Harder</h1>
+                <p class="hero-text">Experience the future of agriculture with our AI-driven ecosystem. Ask questions,
+                    trade goods, or consult experts seamlessly.</p>
             </div>
 
-            <div class="feature-card" onclick="showSection('ai-chat')" style="cursor: pointer; background: white; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 1.25rem; overflow: hidden; display: flex; align-items: stretch; transition: transform 0.2s ease;">
-                <div style="width: 110px; flex-shrink: 0;">
-                    <img src="images/ai_farm_assistant.png" alt="AI Assistant" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="feature-card" onclick="showSection('ai-chat')">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
                 </div>
-                <div style="flex: 1; padding: 1.25rem 1rem; display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="margin-bottom: 0.25rem; font-size: 1.1rem; color: #111;">AI Farm Assistant</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin: 0;">Get instant expert farming advice from our smart AI.</p>
+                <div class="feature-content">
+                    <h3>AI Farm Assistant</h3>
+                    <p>Instant expert farming advice from our advanced AI model.</p>
                 </div>
-                <div style="padding: 1.25rem 1rem; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: rgba(22, 163, 74, 0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="feature-card" onclick="showSection('market')" style="cursor: pointer; background: white; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 1.25rem; overflow: hidden; display: flex; align-items: stretch; transition: transform 0.2s ease;">
-                <div style="width: 110px; flex-shrink: 0;">
-                    <img src="images/farm_marketplace.png" alt="Marketplace" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <div style="flex: 1; padding: 1.25rem 1rem; display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="margin-bottom: 0.25rem; font-size: 1.1rem; color: #111;">Marketplace</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin: 0;">Buy and sell fresh farm produce directly.</p>
-                </div>
-                <div style="padding: 1.25rem 1rem; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: rgba(22, 163, 74, 0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
-                    </div>
+                <div style="margin-left: auto; color: var(--primary);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5l7 7-7 7"></path>
+                    </svg>
                 </div>
             </div>
 
-            <div class="feature-card" onclick="window.open('http://agriconnect.gt.tc/', '_blank')" style="cursor: pointer; background: white; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 1.25rem; overflow: hidden; display: flex; align-items: stretch; transition: transform 0.2s ease;">
-                <div style="width: 110px; flex-shrink: 0;">
-                    <img src="images/vet_consultation.png" alt="Vet Consultation" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="feature-card" onclick="showSection('market')">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
                 </div>
-                <div style="flex: 1; padding: 1.25rem 1rem; display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="margin-bottom: 0.25rem; font-size: 1.1rem; color: #111;">Consult Vets</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin: 0;">Connect with certified veterinary professionals.</p>
+                <div class="feature-content">
+                    <h3>Digital Marketplace</h3>
+                    <p>Buy premium seeds or sell fresh farm produce directly.</p>
                 </div>
-                <div style="padding: 1.25rem 1rem; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: rgba(22, 163, 74, 0.1); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                    </div>
+                <div style="margin-left: auto; color: var(--primary);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5l7 7-7 7"></path>
+                    </svg>
                 </div>
             </div>
+
+            <div class="feature-card" onclick="window.open('http://agriconnect.gt.tc/', '_blank')">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="feature-content">
+                    <h3>Consult Top Vets</h3>
+                    <p>Connect with certified veterinary professionals instantly.</p>
+                </div>
+                <div style="margin-left: auto; color: var(--primary);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Vets Container (Populated by JS) -->
+            <!-- <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.75rem;">Top Consultants</h2>
+                <div id="home-vets">
+                    <!-- Vets injected by JS -->
+            <!-- </div> -->
+            <!-- </div> -->
         </section>
 
         <!-- AI CHAT SECTION -->
@@ -121,13 +161,15 @@
 
         <!-- MARKET SECTION -->
         <section id="market" class="d-none">
-            <div class="section-header">
-                <h2>Marketplace</h2>
-                <button class="btn btn-primary" onclick="openModal('sell-modal')">+ Sell</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="margin: 0; font-size: 2.25rem;">Marketplace</h2>
+                <button class="btn btn-primary" onclick="openModal('sell-modal')" style="padding: 0.75rem 1.5rem;">+
+                    Sell Item</button>
             </div>
-            <div class="form-group mb-2">
-                <input type="search" class="input-field" placeholder="Search crops, seeds, tools..."
-                    aria-label="Search products">
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <input type="search" class="input-field" placeholder="Search premium crops, seeds, tools..."
+                    aria-label="Search products"
+                    style="padding: 1.25rem 1.5rem; border-radius: 100px; box-shadow: var(--shadow-soft);">
             </div>
             <div class="product-grid" id="market-list">
                 <!-- Market items injected JS -->
@@ -135,33 +177,37 @@
         </section>
 
         <!-- AUTH SECTION -->
-        <section id="auth" class="d-none">
-            <div class="card">
-                <h2 class="auth-header">Welcome Back</h2>
+        <section id="auth" class="d-none" style="display: flex; justify-content: center; padding-top: 2rem;">
+            <div
+                style="background: var(--bg-surface); padding: 3rem 2.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-hover); max-width: 440px; width: 100%; text-align: center;">
+                <h2 style="margin-bottom: 2rem;">Welcome Back</h2>
 
-                <div class="role-selector" id="role-selector">
-                    <button type="button" class="btn btn-outline text-xs active" data-role="farmer"
+                <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;"
+                    id="role-selector">
+                    <button type="button" class="btn btn-outline active" data-role="farmer"
                         onclick="selectRole(this)">Farmer</button>
-                    <button type="button" class="btn btn-outline text-xs" data-role="consumer"
+                    <button type="button" class="btn btn-outline" data-role="consumer"
                         onclick="selectRole(this)">Consumer</button>
-                    <button type="button" class="btn btn-outline text-xs" data-role="vet"
+                    <button type="button" class="btn btn-outline" data-role="vet"
                         onclick="selectRole(this)">Vet</button>
                 </div>
 
-                <form onsubmit="event.preventDefault(); showSection('home');">
+                <form onsubmit="event.preventDefault(); showSection('home');" style="text-align: left;">
                     <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" class="input-field" placeholder="user@example.com" required
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="input-field" placeholder="you@farm.com" required
                             autocomplete="email">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 2rem;">
                         <label for="login-password">Password</label>
                         <input type="password" id="login-password" class="input-field" placeholder="••••••••" required
                             autocomplete="current-password" minlength="6">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Log In</button>
-                    <p class="text-center text-sm mt-4">Don't have an account? <a href="#"
-                            class="text-primary font-bold">Sign up</a></p>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.25rem;">Secure
+                        Login</button>
+                    <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">
+                        New to MyFarmAI? <a href="#" style="color: var(--primary); font-weight: 700;">Create Account</a>
+                    </p>
                 </form>
             </div>
         </section>
@@ -171,22 +217,22 @@
     <!-- Modal for Selling -->
     <div id="sell-modal" class="modal-backdrop">
         <div class="modal-content">
-            <h3 class="mb-2">Sell Your Produce</h3>
+            <h3 style="margin-bottom: 1.5rem; font-size: 1.75rem;">Sell Produce</h3>
             <form id="sell-form" onsubmit="handleSellSubmit(event)">
                 <div class="form-group">
-                    <label for="sell-name">Product Name</label>
-                    <input type="text" id="sell-name" class="input-field" required placeholder="e.g. Fresh Tomatoes"
+                    <label for="sell-name">Product Title</label>
+                    <input type="text" id="sell-name" class="input-field" required placeholder="e.g. Organic Tomatoes"
                         maxlength="50">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 2rem;">
                     <label for="sell-price">Price (₦)</label>
                     <input type="number" id="sell-price" class="input-field" required placeholder="5000" min="0"
                         step="100">
                 </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline flex-1"
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" class="btn btn-outline" style="flex: 1;"
                         onclick="closeModal('sell-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary flex-1">Post</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Post Listing</button>
                 </div>
             </form>
         </div>
@@ -194,16 +240,16 @@
 
     <!-- PWA Install Popup -->
     <div id="install-popup" class="modal-backdrop">
-        <div class="modal-content" style="text-align: center; max-width: 350px;">
+        <div class="modal-content" style="text-align: center;">
             <img src="images/icon-192.png" alt="App Icon"
-                style="width: 72px; height: 72px; border-radius: 16px; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            <h3 style="margin-bottom: 0.5rem;">Install MyFarmAI</h3>
-            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.5;">Install our app on your
-                device for quick access, offline support, and a better experience.</p>
-            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <button id="install-btn" class="btn btn-primary" style="width: 100%;">Install App</button>
-                <button class="btn btn-outline" style="width: 100%; border: none;" onclick="dismissInstall()">Not
-                    Now</button>
+                style="width: 80px; height: 80px; border-radius: 20px; margin-bottom: 1.5rem; box-shadow: var(--shadow-hover);">
+            <h3 style="margin-bottom: 0.75rem;">Install Premium App</h3>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Get the full native experience with offline
+                access, quick launching, and push notifications.</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button id="install-btn" class="btn btn-primary">Install Application</button>
+                <button class="btn btn-outline" style="border: none; color: var(--text-muted);"
+                    onclick="dismissInstall()">Maybe Later</button>
             </div>
         </div>
     </div>
@@ -211,32 +257,33 @@
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" onclick="showSection('home'); return false;" id="nav-home">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
             Home
         </a>
         <a href="#" class="nav-item" onclick="showSection('ai-chat'); return false;" id="nav-chat">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
             Ask AI
         </a>
         <a href="#" class="nav-item" onclick="showSection('market'); return false;" id="nav-market">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="9" cy="21" r="1"></circle>
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
             Shop
         </a>
-        <a href="#" class="nav-item" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;" id="nav-consult">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="#" class="nav-item" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;"
+            id="nav-consult">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
