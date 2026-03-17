@@ -231,8 +231,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
     // Stash the event so it can be triggered later.
     deferredPrompt = e;
     
-    // Show the popup automatically after 2 seconds if not previously dismissed
-    if (!localStorage.getItem('installDismissed')) {
+    // Show the popup automatically after 2 seconds for every new visit
+    if (!sessionStorage.getItem('installDismissed')) {
         setTimeout(() => {
             openModal('install-popup');
         }, 2000);
@@ -263,6 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Handle Dismissal
 window.dismissInstall = function() {
     closeModal('install-popup');
-    // Save dismissal state so we don't nag them repeatedly
-    localStorage.setItem('installDismissed', 'true');
+    // Save dismissal state for this session only so it shows on next visit
+    sessionStorage.setItem('installDismissed', 'true');
 };
