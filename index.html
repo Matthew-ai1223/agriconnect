@@ -56,27 +56,40 @@
             <a href="#" onclick="showSection('market'); return false;">Marketplace</a>
             <a href="#" onclick="window.open('http://agriconnect.gt.tc/', '_blank'); return false;">Vet Connect</a>
         </nav>
-        <div class="user-actions">
-            <!-- Cart Button -->
-            <button class="btn btn-icon" onclick="toggleCart()" aria-label="Shopping Cart">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span id="cart-count" class="badge">0</span>
+        <div class="user-actions header-actions" role="toolbar" aria-label="Account and cart">
+            <button type="button" class="header-action-btn header-action-btn--cart" onclick="toggleCart()"
+                aria-label="Open shopping cart" id="cart-header-btn">
+                <span class="header-action-btn__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </span>
+                <span class="header-action-btn__text">Cart</span>
+                <span id="cart-count" class="cart-count-pill cart-count-pill--empty" aria-live="polite">0</span>
             </button>
-            <button class="btn btn-icon" id="profile-btn" onclick="showSection('auth')" aria-label="User Profile">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+
+            <button type="button" class="header-action-btn header-action-btn--account" id="profile-btn"
+                onclick="showSection('auth')" aria-label="Sign in or create account">
+                <span class="header-action-btn__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </span>
+                <span class="header-action-btn__text">Sign in</span>
             </button>
-            <div id="user-display" class="d-none" style="margin-left: 0.5rem; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
-                <span id="user-email-header"></span>
-                <button onclick="handleLogout()" style="color: #ef4444; border: none; background: none; cursor: pointer; font-size: 0.75rem;">Logout</button>
+
+            <div id="user-display" class="d-none user-chip" role="status" aria-live="polite">
+                <span class="user-chip__avatar" id="user-avatar-initial" aria-hidden="true">U</span>
+                <div class="user-chip__info">
+                    <span class="user-chip__label">Signed in</span>
+                    <span id="user-email-header" class="user-chip__email"></span>
+                </div>
+                <button type="button" class="user-chip__logout" onclick="handleLogout()">Log out</button>
             </div>
         </div>
     </header>

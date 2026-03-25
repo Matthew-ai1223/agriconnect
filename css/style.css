@@ -222,6 +222,168 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     transform: scale(1.05);
 }
 
+/* Header: cart & account (modern pill actions) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+    .header-actions {
+        gap: 0.75rem;
+    }
+}
+
+.header-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0.45rem 0.65rem 0.45rem 0.75rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-surface);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--text-main);
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.header-action-btn:hover {
+    color: var(--primary);
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: 0 6px 22px rgba(16, 185, 129, 0.12);
+    transform: translateY(-1px);
+}
+
+.header-action-btn:active {
+    transform: translateY(0);
+}
+
+.header-action-btn__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.header-action-btn__text {
+    display: none;
+    max-width: 7rem;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+    .header-action-btn__text {
+        display: inline;
+    }
+
+    .header-action-btn--cart {
+        padding-right: 0.85rem;
+    }
+}
+
+.cart-count-pill {
+    min-width: 1.375rem;
+    height: 1.375rem;
+    padding: 0 0.35rem;
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.1rem;
+    transition: background 0.2s ease;
+}
+
+.cart-count-pill--empty {
+    background: rgba(100, 116, 139, 0.35);
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: min(100%, 280px);
+    padding: 0.35rem 0.5rem 0.35rem 0.4rem;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.06));
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    box-shadow: var(--shadow-soft);
+}
+
+.user-chip__avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-chip__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.user-chip__label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+.user-chip__email {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-chip__logout {
+    flex-shrink: 0;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.1);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-family: inherit;
+    transition: var(--transition-smooth);
+}
+
+.user-chip__logout:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #991b1b;
+}
+
 /* Hero Section */
 .hero-card {
     background: linear-gradient(135deg, #059669, #10B981, #34D399);

@@ -386,12 +386,15 @@ function updateAuthUI() {
     const profileBtn = document.getElementById('profile-btn');
     const userDisplay = document.getElementById('user-display');
     const userEmailHeader = document.getElementById('user-email-header');
+    const avatarEl = document.getElementById('user-avatar-initial');
 
     if (state.currentUser) {
         profileBtn.classList.add('d-none');
         userDisplay.classList.remove('d-none');
-        userDisplay.style.display = 'flex';
-        userEmailHeader.textContent = state.currentUser.email.split('@')[0];
+        userDisplay.style.display = '';
+        const local = state.currentUser.email.split('@')[0];
+        userEmailHeader.textContent = local;
+        if (avatarEl) avatarEl.textContent = (local.charAt(0) || 'U').toUpperCase();
     } else {
         profileBtn.classList.remove('d-none');
         userDisplay.classList.add('d-none');
@@ -480,7 +483,10 @@ function renderCart() {
         });
     }
 
-    count.textContent = itemCount;
+    if (count) {
+        count.textContent = itemCount;
+        count.classList.toggle('cart-count-pill--empty', itemCount === 0);
+    }
     totalEl.textContent = `₦${total.toLocaleString()}`;
 }
 
