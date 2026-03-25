@@ -217,6 +217,34 @@
                         <input type="password" id="login-password" class="input-field" placeholder="••••••••" required
                             autocomplete="current-password" minlength="6">
                     </div>
+
+                    <div id="signup-legal" class="d-none" style="margin-bottom: 1.5rem; text-align: left;">
+                        <details
+                            style="background: var(--bg-elevated, rgba(0,0,0,0.04)); border: 1px solid var(--border-soft); border-radius: var(--radius-md, 12px); padding: 0.75rem 1rem; margin-bottom: 1rem;">
+                            <summary style="cursor: pointer; font-weight: 600; color: var(--text-primary);">Terms &amp; Conditions</summary>
+                            <div style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--text-muted); line-height: 1.55; max-height: 220px; overflow-y: auto;">
+                                <p style="margin: 0 0 0.75rem 0;">By creating an account on MyFarmAI, you agree to use the service responsibly, provide accurate information where required, and follow applicable laws. We may update these terms; continued use means you accept changes.</p>
+                                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: var(--text-primary);">AI improvement &amp; your data</p>
+                                <p style="margin: 0 0 0.75rem 0;">We may use your conversations with the AI assistant and related account data to train or improve our models and product experience. This is optional: please choose <strong>Yes</strong> if you consent, or <strong>No</strong> if you do not want your chats or related data used for AI improvement. You can change this preference later when we add account settings.</p>
+                                <fieldset style="border: 0; margin: 0; padding: 0;">
+                                    <legend style="font-weight: 600; font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.5rem;">Use my chats &amp; data to improve the AI?</legend>
+                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="ai-data-consent" value="yes" id="ai-consent-yes" style="margin-top: 0.2rem;">
+                                        <span>Yes — I agree my chats and related data may be used to improve the AI.</span>
+                                    </label>
+                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="ai-data-consent" value="no" id="ai-consent-no" style="margin-top: 0.2rem;">
+                                        <span>No — do not use my chats or related data for AI improvement.</span>
+                                    </label>
+                                </fieldset>
+                            </div>
+                        </details>
+                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; cursor: pointer;">
+                            <input type="checkbox" id="terms-accept" style="margin-top: 0.25rem;">
+                            <span>I have read and agree to the Terms &amp; Conditions above.</span>
+                        </label>
+                    </div>
+
                     <button type="submit" class="btn btn-primary" id="auth-submit-btn" style="width: 100%; padding: 1.25rem;">Secure
                         Login</button>
                     <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted);">

@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         syncCart();
     }
 
+    updateSignupLegalVisibility();
+
     // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -243,6 +245,35 @@ window.handleSellSubmit = async function (e) {
 };
 
 // Auth Functions
+function updateSignupLegalVisibility() {
+    const signupLegal = document.getElementById('signup-legal');
+    const termsAccept = document.getElementById('terms-accept');
+    const consentYes = document.getElementById('ai-consent-yes');
+    const consentNo = document.getElementById('ai-consent-no');
+    if (!signupLegal) return;
+
+    if (state.authMode === 'signup') {
+        signupLegal.classList.remove('d-none');
+        if (termsAccept) termsAccept.required = true;
+        if (consentYes) consentYes.required = true;
+        if (consentNo) consentNo.required = false;
+    } else {
+        signupLegal.classList.add('d-none');
+        if (termsAccept) {
+            termsAccept.required = false;
+            termsAccept.checked = false;
+        }
+        if (consentYes) {
+            consentYes.required = false;
+            consentYes.checked = false;
+        }
+        if (consentNo) {
+            consentNo.required = false;
+            consentNo.checked = false;
+        }
+    }
+}
+
 window.toggleAuthMode = function () {
     state.authMode = state.authMode === 'login' ? 'signup' : 'login';
     const title = document.getElementById('auth-title');
@@ -261,6 +292,7 @@ window.toggleAuthMode = function () {
         toggleText.textContent = 'New to MyFarmAI?';
         toggleLink.textContent = 'Create Account';
     }
+    updateSignupLegalVisibility();
 };
 
 window.handleAuthSubmit = async function (e) {
@@ -268,16 +300,36 @@ window.handleAuthSubmit = async function (e) {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value; // We don't hash yet for simplicity
 
+    const payload = { email };
+
+    if (state.authMode === 'signup') {
+        const termsAccept = document.getElementById('terms-accept');
+        const consent = document.querySelector('input[name="ai-data-consent"]:checked');
+        if (!termsAccept || !termsAccept.checked) {
+            showToast('Please read and accept the Terms & Conditions.', 'error');
+            return;
+        }
+        if (!consent) {
+            showToast('Please choose Yes or No for using your data to improve our AI.', 'error');
+            return;
+        }
+        payload.termsAccepted = true;
+        payload.aiDataConsent = consent.value;
+    }
+
     try {
         const res = await fetch(`${API_BASE}/auth`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+            body: JSON.stringify(payload)
         });
         const data = await res.json();
 
         if (data.success) {
             state.currentUser = { email: data.email };
+            if (data.aiDataConsent === 'yes' || data.aiDataConsent === 'no') {
+                state.currentUser.aiDataConsent = data.aiDataConsent;
+            }
             localStorage.setItem('myfarmai_user', JSON.stringify(state.currentUser));
             updateAuthUI();
             syncUserToAI(); // [NEW] Sync after login
