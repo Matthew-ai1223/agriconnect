@@ -1,4 +1,4 @@
-const CACHE_NAME = 'myfarmai-v1.3-install-popup-reshow';
+const CACHE_NAME = 'myfarmai-v1.4-install-popup-schedule';
 
 // Install Event - skip waiting immediately
 self.addEventListener('install', (e) => {

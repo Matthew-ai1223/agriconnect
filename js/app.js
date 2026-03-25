@@ -29,6 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateSignupLegalVisibility();
 
+    scheduleInstallPopup();
+    const installBtn = document.getElementById('install-btn');
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            closeModal('install-popup');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+            } else {
+                showToast('Add this site to your home screen from the browser menu, or install may not be available here.', 'info');
+            }
+        });
+    }
+
     // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
