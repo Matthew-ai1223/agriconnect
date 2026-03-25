@@ -334,6 +334,67 @@ window.closeModal = function (modalId) {
     if (modal) modal.classList.remove('open');
 };
 
+window.openSellModal = function () {
+    const idEl = document.getElementById('sell-product-id');
+    const titleEl = document.getElementById('sell-modal-title');
+    const btnEl = document.getElementById('sell-submit-btn');
+    const form = document.getElementById('sell-form');
+    if (form) form.reset();
+    if (idEl) idEl.value = '';
+    if (titleEl) titleEl.textContent = 'List a product';
+    if (btnEl) btnEl.textContent = 'Post listing';
+    openModal('sell-modal');
+};
+
+window.startEditProduct = function (product) {
+    if (!state.currentUser) {
+        showToast('Sign in to edit your listings.', 'error');
+        showSection('auth');
+        return;
+    }
+    const idEl = document.getElementById('sell-product-id');
+    const titleEl = document.getElementById('sell-modal-title');
+    const btnEl = document.getElementById('sell-submit-btn');
+    if (idEl) idEl.value = product.id;
+    if (titleEl) titleEl.textContent = 'Edit listing';
+    if (btnEl) btnEl.textContent = 'Save changes';
+    document.getElementById('sell-name').value = product.title || '';
+    document.getElementById('sell-price').value = product.price != null ? String(product.price) : '';
+    document.getElementById('sell-category').value = product.category || 'Produce';
+    document.getElementById('sell-image').value = product.image || '';
+    document.getElementById('sell-phone').value = product.sellerPhone || '';
+    const desc = document.getElementById('sell-description');
+    if (desc) desc.value = product.description || '';
+    openModal('sell-modal');
+};
+
+window.deleteProduct = async function (productId) {
+    if (!state.currentUser) {
+        showToast('Sign in to manage listings.', 'error');
+        return;
+    }
+    if (!confirm('Remove this listing from the marketplace? This cannot be undone.')) return;
+
+    try {
+        const res = await fetch(
+            `${API_BASE}/products/${encodeURIComponent(productId)}?email=${encodeURIComponent(state.currentUser.email)}`,
+            { method: 'DELETE' }
+        );
+        const data = await res.json().catch(() => ({}));
+        if (data.status === 'success') {
+            state.products = state.products.filter((p) => p.id !== productId);
+            rebuildMarketCategoryOptions();
+            applyMarketFilter();
+            if (typeof syncCart === 'function') await syncCart();
+            showToast('Listing removed.', 'success');
+        } else {
+            showToast(data.error || data.message || 'Could not delete listing.', 'error');
+        }
+    } catch (err) {
+        showToast('Could not reach server.', 'error');
+    }
+};
+
 window.handleSellSubmit = async function (e) {
     e.preventDefault();
     if (!state.currentUser) {
@@ -342,26 +403,54 @@ window.handleSellSubmit = async function (e) {
         return;
     }
 
+    const editId = (document.getElementById('sell-product-id')?.value || '').trim();
     const title = document.getElementById('sell-name').value;
     const price = document.getElementById('sell-price').value;
     const category = document.getElementById('sell-category').value;
     const image = document.getElementById('sell-image').value;
     const phone = document.getElementById('sell-phone').value;
+    const description = document.getElementById('sell-description')?.value?.trim() || '';
 
     if (!title || !price) return;
 
+    const payload = {
+        title,
+        price,
+        category,
+        image,
+        phone,
+        description,
+        email: state.currentUser.email
+    };
+
     try {
+        if (editId) {
+            const res = await fetch(`${API_BASE}/products/${encodeURIComponent(editId)}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json().catch(() => ({}));
+            if (data.status === 'success' && data.data) {
+                const idx = state.products.findIndex((p) => p.id === editId);
+                if (idx !== -1) state.products[idx] = data.data;
+                rebuildMarketCategoryOptions();
+                applyMarketFilter();
+                document.getElementById('sell-form').reset();
+                const hid = document.getElementById('sell-product-id');
+                if (hid) hid.value = '';
+                closeModal('sell-modal');
+                showToast('Listing updated.', 'success');
+            } else {
+                showToast(data.error || data.message || 'Could not update listing.', 'error');
+            }
+            return;
+        }
+
         const res = await fetch(`${API_BASE}/products`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title,
-                price,
-                category,
-                image,
-                phone,
-                email: state.currentUser.email
-            })
+            body: JSON.stringify(payload)
         });
         const data = await res.json();
 
@@ -371,10 +460,12 @@ window.handleSellSubmit = async function (e) {
             applyMarketFilter();
             document.getElementById('sell-form').reset();
             closeModal('sell-modal');
-            showToast('Product Posted Successfully!', 'success');
+            showToast('Product posted successfully!', 'success');
+        } else {
+            showToast(data.message || 'Could not post product.', 'error');
         }
     } catch (err) {
-        showToast('Failed to post product.', 'error');
+        showToast('Failed to save listing.', 'error');
     }
 };
 
