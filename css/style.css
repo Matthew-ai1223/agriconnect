@@ -608,6 +608,64 @@ label {
     transform: translateY(0) scale(1);
 }
 
+/* Sell modal — fits small viewports, smooth internal scroll */
+.modal-backdrop--sell {
+    padding: max(0.75rem, env(safe-area-inset-top, 0px)) max(0.75rem, env(safe-area-inset-right, 0px))
+        max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));
+    align-items: center;
+    justify-content: center;
+}
+
+#sell-modal .sell-modal {
+    padding: 0;
+    max-width: min(420px, 100%);
+    width: 100%;
+    max-height: min(92vh, calc(100dvh - 1.5rem));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#sell-modal .sell-modal-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 1.25rem 1.35rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+}
+
+.sell-modal-title {
+    margin: 0 0 1.25rem 0;
+    font-size: clamp(1.25rem, 4.5vw, 1.75rem);
+    line-height: 1.25;
+    padding-right: 0.25rem;
+}
+
+.sell-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+}
+
+.sell-modal-actions__btn {
+    flex: 1;
+    min-width: min(120px, 100%);
+    padding: 0.85rem 1rem;
+}
+
+@media (max-width: 380px) {
+    #sell-modal .sell-modal-scroll {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
 /* Bottom Navigation */
 .bottom-nav {
     position: fixed;
