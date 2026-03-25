@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span></li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li class="active" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search conversations...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn active" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i></div>
+                </div>
+            </header>
+
+            <div class="messages-container">
+                <!-- Chat List -->
+                <aside class="chat-list">
+                    <div class="chat-list-header">
+                        <h3 style="margin:0; font-size: 18px;">Conversations</h3>
+                    </div>
+                    <div class="chat-list-items">
+                        <div class="chat-item active">
+                            <div class="avatar" style="background: #22c55e;">DM</div>
+                            <div style="flex-grow: 1; overflow: hidden;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <strong style="font-size: 15px;">Dr. Musa</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted)">10:45 AM</span>
+                                </div>
+                                <p style="font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
+                                    Your appointment is confirmed for...</p>
+                            </div>
+                        </div>
+                        <div class="chat-item">
+                            <div class="avatar" style="background: #14532d;">JA</div>
+                            <div style="flex-grow: 1; overflow: hidden;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <strong style="font-size: 15px;">John Adeyemi</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted)">Yesterday</span>
+                                </div>
+                                <p style="font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
+                                    Is the maize still available in bulk?</p>
+                            </div>
+                        </div>
+                        <div class="chat-item">
+                            <div class="avatar" style="background: #f59e0b;">AC</div>
+                            <div style="flex-grow: 1; overflow: hidden;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <strong style="font-size: 15px;">AgriCorp Ltd</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted)">Monday</span>
+                                </div>
+                                <p style="font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
+                                    New fertilizer stock arrives next week.</p>
+                            </div>
+                        </div>
+                        <div class="chat-item">
+                            <div class="avatar" style="background: #3b82f6;">SN</div>
+                            <div style="flex-grow: 1; overflow: hidden;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <strong style="font-size: 15px;">Sarah Nwosu</strong>
+                                    <span style="font-size: 11px; color: var(--text-muted)">Oct 12</span>
+                                </div>
+                                <p style="font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
+                                    Has the transport been arranged yet?</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Chat Body -->
+                <section class="chat-body">
+                    <header class="chat-header">
+                        <div class="avatar" style="background: #22c55e;">DM</div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 18px;">Dr. Musa Ibrahim</h3>
+                            <span style="font-size: 13px; color: var(--primary); font-weight: 500;">
+                                <i class="fa fa-circle" style="font-size: 8px;"></i> Online
+                            </span>
+                        </div>
+                    </header>
+
+                    <div class="chat-messages">
+                        <div class="message received">
+                            <p>Hello Farmer, I've reviewed the photos of your crops. It looks like a mild case of leaf blight.</p>
+                            <span class="message-time">10:42 AM</span>
+                        </div>
+
+                        <div class="message sent">
+                            <p>Thank you Dr. Musa. What treatment would you recommend for this season?</p>
+                            <span class="message-time">10:44 AM</span>
+                        </div>
+
+                        <div class="message received">
+                            <p>I'll send you a detailed prescription list. Your appointment is confirmed for 20th March to discuss the plan.</p>
+                            <span class="message-time">10:45 AM</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <button class="icon-btn" style="border-radius: 50%;"><i class="fa fa-paperclip"></i></button>
+                        <input type="text" placeholder="Type your message..." style="flex-grow: 1; padding: 12px 18px; border-radius: 25px; border: 1px solid var(--border); outline: none;">
+                        <button class="primary-btn" style="padding: 12px 24px; border-radius: 25px;">
+                            <i class="fa fa-paper-plane" style="margin-right: 8px;"></i> Send
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

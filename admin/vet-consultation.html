@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Consultation - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span>
+                </li>
+                <li class="active" onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i>
+                    <span>Vet Consultation</span>
+                </li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search for vets, clinics, or past records...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span
+                            class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span
+                            class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-header">
+                <div>
+                    <h1>Vet Consultation</h1>
+                    <p style="color: var(--text-muted); font-size: 14px;">Connect with top veterinary experts for your
+                        livestock</p>
+                </div>
+                <button class="primary-btn"><i class="fa fa-calendar-plus"></i> Book New Consultation</button>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Upcoming Appointments -->
+                <section class="dashboard-section" style="grid-column: span 2;">
+                    <h3>Upcoming & Recent Consultations</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Consultant</th>
+                                    <th>Specialization</th>
+                                    <th>Date & Time</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div class="avatar"
+                                                style="background: var(--primary); width: 32px; height: 32px; font-size: 12px;">
+                                                SC</div>
+                                            <span style="font-weight: 600;">Dr. Sarah Chen</span>
+                                        </div>
+                                    </td>
+                                    <td>Poultry Expert</td>
+                                    <td>Tomorrow, 10:00 AM</td>
+                                    <td>Video Call</td>
+                                    <td><span class="status-badge processing">Confirmed</span></td>
+                                    <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">Join
+                                            Call</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div class="avatar"
+                                                style="background: #3b82f6; width: 32px; height: 32px; font-size: 12px;">
+                                                MI</div>
+                                            <span style="font-weight: 600;">Dr. Musa Ibrahim</span>
+                                        </div>
+                                    </td>
+                                    <td>Livestock Specialist</td>
+                                    <td>15 Mar, 02:30 PM</td>
+                                    <td>On-site Visit</td>
+                                    <td><span class="status-badge processing">Scheduled</span></td>
+                                    <td><button class="secondary-btn"
+                                            style="padding: 5px 10px; font-size: 12px;">Reschedule</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div class="avatar"
+                                                style="background: #64748b; width: 32px; height: 32px; font-size: 12px;">
+                                                EK</div>
+                                            <span style="font-weight: 600;">Dr. Elizabeth Kole</span>
+                                        </div>
+                                    </td>
+                                    <td>Dairy/Cattle</td>
+                                    <td>10 Mar, 09:00 AM</td>
+                                    <td>Audio Call</td>
+                                    <td><span class="status-badge delivered">Completed</span></td>
+                                    <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">View
+                                            Summary</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Recommendation Column -->
+                <section class="dashboard-section">
+                    <h3>Recommended Vets</h3>
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+                        <div
+                            style="padding: 15px; background: #f8fafc; border-radius: 12px; border-left: 4px solid var(--primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; font-size: 15px;">Dr. Samuel Ade</h4>
+                                <span style="font-size: 12px; color: var(--accent);"><i class="fa fa-star"></i>
+                                    4.9</span>
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-muted); margin: 5px 0 12px 0;">Specialist in
+                                Fishery and Aquatic Health</p>
+                            <button class="primary-btn-sm" style="width: 100%;">Book Consultation</button>
+                        </div>
+                        <div
+                            style="padding: 15px; background: #f8fafc; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; font-size: 15px;">Dr. Grace Otu</h4>
+                                <span style="font-size: 12px; color: var(--accent);"><i class="fa fa-star"></i>
+                                    4.8</span>
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-muted); margin: 5px 0 12px 0;">Large Animal
+                                Surgeon (Equine & Bovine)</p>
+                            <button class="primary-btn-sm" style="width: 100%;">Book Consultation</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Consultation Request -->
+                <section class="dashboard-section">
+                    <h3>Emergency Help</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 13px;">Describe symptoms for
+                        urgent response from our AI or on-call vet.</p>
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <div class="form-group">
+                            <textarea placeholder="e.g. Unusual mortality in poultry, sluggish behavior..."
+                                style="width: 100%; height: 120px; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #f8fafc; font-family: inherit; font-size: 14px;"></textarea>
+                        </div>
+                        <button class="primary-btn"
+                            style="width: 100%; background: #ef4444; box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3);">Submit
+                            Urgent Request</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

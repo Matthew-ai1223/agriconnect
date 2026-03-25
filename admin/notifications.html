@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span>
+                </li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet
+                        Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li class="active" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i>
+                    <span>Notifications</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search notifications...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn active" onclick="location.href='notifications.html'"><i
+                            class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span
+                            class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-header">
+                <div>
+                    <h1>NotificationsCenter</h1>
+                    <p style="color: var(--text-muted); font-size: 14px;">Stay updated with your farm's latest
+                        activities</p>
+                </div>
+                <div class="btn-group">
+                    <button class="secondary-btn"><i class="fa fa-check-double"></i> Mark all as read</button>
+                    <button class="primary-btn"><i class="fa fa-cog"></i> Notification Settings</button>
+                </div>
+            </div>
+
+            <div class="notifications-container">
+                <!-- Notifications Tabs -->
+                <div class="notifications-tabs">
+                    <button class="tab-btn active">All Notifications <span>12</span></button>
+                    <button class="tab-btn">Unread <span>3</span></button>
+                    <button class="tab-btn">Orders</button>
+                    <button class="tab-btn">Alerts</button>
+                    <button class="tab-btn">System</button>
+                </div>
+
+                <!-- Notifications List -->
+                <div class="notifications-list">
+                    <!-- New Notification -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon order">
+                            <i class="fa fa-shopping-bag"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <h3>New Order Received</h3>
+                                <span class="time">2 minutes ago</span>
+                            </div>
+                            <p>You have received a new order #ORD-7729 for 500kg of Golden Maize from <strong>GrainCorp
+                                    industries</strong>.</p>
+                            <div class="notification-actions">
+                                <button class="action-btn primary">View Order</button>
+                                <button class="action-btn">Mark as Read</button>
+                            </div>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- Weather Alert -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon alert">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <h3>Weather Alert: Heavy Rainfall Expected</h3>
+                                <span class="time">1 hour ago</span>
+                            </div>
+                            <p>Severe thunderstorms and heavy rainfall are predicted for Ogun region within the next 24
+                                hours. Secure your irrigation systems.</p>
+                            <div class="notification-actions">
+                                <button class="action-btn primary">See Forecast</button>
+                                <button class="action-btn">Acknowledge</button>
+                            </div>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- System Update -->
+                    <div class="notification-item unread">
+                        <div class="notification-icon system">
+                            <i class="fa fa-robot"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <h3>AI Insight: Soil Moisture Low</h3>
+                                <span class="time">3 hours ago</span>
+                            </div>
+                            <p>Sensors in Sector B indicate soil moisture levels have dropped below 40%. Automatic
+                                irrigation is recommended.</p>
+                            <div class="notification-actions">
+                                <button class="action-btn primary">Start Irrigation</button>
+                                <button class="action-btn">Ignore</button>
+                            </div>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- Regular Notification -->
+                    <div class="notification-item">
+                        <div class="notification-icon user">
+                            <i class="fa fa-user-md"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <h3>Vet Appointment Confirmed</h3>
+                                <span class="time">Yesterday, 4:30 PM</span>
+                            </div>
+                            <p>Dr. Sarah Chen has confirmed your appointment for tomorrow at 10:00 AM regarding the
+                                poultry health check.</p>
+                            <div class="notification-actions">
+                                <button class="action-btn">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Market Update -->
+                    <div class="notification-item">
+                        <div class="notification-icon market">
+                            <i class="fa fa-chart-line"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">
+                                <h3>Market Trend: Wheat Prices Up</h3>
+                                <span class="time">Mar 10, 2026</span>
+                            </div>
+                            <p>Global wheat prices have increased by 5.2% today. It might be a good time to list your
+                                remaining stock.</p>
+                            <button class="action-btn">View Market</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="load-more">
+                <button class="secondary-btn">Load Older Notifications</button>
+            </div>
+    </div>
+    </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriConnect Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#0a1013; --panel:#111a1f; --panel2:#15232b; --text:#f2f7fa; --muted:#91a3af; --brand:#10b981; --line:#233640; --warn:#f59e0b; }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family:Inter,sans-serif; background:var(--bg); color:var(--text); }
+        .wrap { max-width:1400px; margin:0 auto; padding:24px; }
+        .top { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+        .title { font-size:24px; font-weight:800; }
+        .small { color:var(--muted); font-size:13px; }
+        .btn { background:var(--brand); color:#032016; border:0; font-weight:700; border-radius:10px; padding:10px 14px; cursor:pointer; }
+        .btn-outline { display:inline-flex; align-items:center; background:transparent; color:var(--text); border:1px solid var(--line); font-weight:600; border-radius:10px; padding:10px 14px; cursor:pointer; text-decoration:none; font-size:14px; }
+        .btn-outline:hover { border-color:var(--brand); color:var(--brand); }
+        .grid4 { display:grid; gap:14px; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px; }
+        .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+        .card h3 { margin:0 0 6px 0; font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; }
+        .metric { font-size:28px; font-weight:800; }
+        .main { display:grid; grid-template-columns: 1.1fr 1.2fr .9fr; gap:14px; }
+        .panel-title { margin:0 0 12px 0; font-size:15px; font-weight:700; }
+        .table-wrap, .list { max-height:420px; overflow:auto; }
+        table { width:100%; border-collapse:collapse; font-size:13px; }
+        th, td { text-align:left; border-bottom:1px solid var(--line); padding:10px 8px; vertical-align:top; }
+        th { color:var(--muted); font-weight:600; position:sticky; top:0; background:var(--panel); }
+        .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; background:var(--panel2); color:#bdebd8; border:1px solid #245143; }
+        .activity-item { border-bottom:1px solid var(--line); padding:10px 0; font-size:13px; }
+        .activity-item:last-child { border-bottom:0; }
+        .chat-box { max-height:420px; overflow:auto; background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px; }
+        .m { margin-bottom:8px; font-size:13px; line-height:1.45; }
+        .m b { color:#9be7ca; }
+        .row { display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+        input, select { background:#0b1419; border:1px solid var(--line); color:var(--text); border-radius:10px; padding:8px 10px; }
+        .warn { color:var(--warn); }
+        @media (max-width:1100px){ .grid4{grid-template-columns:repeat(2,minmax(0,1fr));} .main{grid-template-columns:1fr;} }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <div class="title">Vet Connect Admin Panel</div>
+                <div class="small">Monitor users, activities, chats, and products from one dashboard.</div>
+            </div>
+            <div class="row">
+                <select id="api-select">
+                    <option value="http://localhost:3000/api">Local API (http://localhost:3000/api)</option>
+                    <option value="https://farm-ai-iota.vercel.app/api">Production API (farm-ai-iota.vercel.app/api)</option>
+                </select>
+                <button class="btn" id="refresh-btn">Refresh Data</button>
+                <a class="btn-outline" href="http://agriconnect.gt.tc/admin.html" target="_blank" rel="noopener noreferrer">AgriConnect Admin</a>
+                <a class="btn-outline" href="https://my-farm-ai.vercel.app/admin09890.html" target="_blank" rel="noopener noreferrer">MyFarm AI Admin</a>
+            </div>
+        </div>
+
+        <section class="grid4">
+            <article class="card"><h3>Total Users</h3><div class="metric" id="m-users">0</div></article>
+            <article class="card"><h3>Active Users</h3><div class="metric" id="m-active">0</div></article>
+            <article class="card"><h3>Total Chats</h3><div class="metric" id="m-messages">0</div></article>
+            <article class="card"><h3>Products</h3><div class="metric" id="m-products">0</div></article>
+        </section>
+
+        <section class="main">
+            <article class="card">
+                <h2 class="panel-title">Users & Activity</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Email</th><th>Conversations</th><th>Messages</th><th>Last Seen</th></tr>
+                        </thead>
+                        <tbody id="users-body"></tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="row">
+                    <h2 class="panel-title" style="margin:0; flex:1;">User Chat Monitor</h2>
+                    <select id="chat-user"></select>
+                </div>
+                <div id="chat-box" class="chat-box">
+                    <div class="small">Select a user to view chat messages.</div>
+                </div>
+            </article>
+
+            <article class="card">
+                <h2 class="panel-title">Recent System Activity</h2>
+                <div class="list" id="activity-list"></div>
+            </article>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+            <h2 class="panel-title">User Products</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Product</th><th>Category</th><th>Price</th><th>Seller</th><th>Created</th></tr>
+                    </thead>
+                    <tbody id="products-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <p class="small" id="status-line">Ready.</p>
+    </div>
+
+    <script>
+        const state = { data: null };
+        const el = (id) => document.getElementById(id);
+        const formatN = (n) => new Intl.NumberFormat().format(n || 0);
+        const formatMoney = (n) => `N${formatN(Math.round(Number(n || 0)))}`;
+        const formatDate = (d) => d ? new Date(d).toLocaleString() : "-";
+
+        async function fetchOverview() {
+            const base = el("api-select").value;
+            el("status-line").textContent = "Loading admin data...";
+            const res = await fetch(`${base}/admin/overview`);
+            if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
+            const json = await res.json();
+            if (json.status !== "success") throw new Error(json.message || "Unknown server error");
+            return json;
+        }
+
+        function renderMetrics(summary) {
+            el("m-users").textContent = formatN(summary.users);
+            el("m-active").textContent = formatN(summary.activeUsers);
+            el("m-messages").textContent = formatN(summary.messages);
+            el("m-products").textContent = formatN(summary.products);
+        }
+
+        function renderUsers(users) {
+            const tbody = el("users-body");
+            tbody.innerHTML = users.length ? "" : `<tr><td colspan="4" class="warn">No users found.</td></tr>`;
+            users.forEach((u) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${u.email}</td><td>${formatN(u.conversations)}</td><td>${formatN(u.messages)}</td><td>${formatDate(u.lastSeen)}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderProducts(products) {
+            const tbody = el("products-body");
+            tbody.innerHTML = products.length ? "" : `<tr><td colspan="5" class="warn">No products found.</td></tr>`;
+            products.forEach((p) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${p.title || "Untitled"}</td><td><span class="pill">${p.category || "General"}</span></td><td>${formatMoney(p.price)}</td><td>${p.sellerEmail || "-"}</td><td>${formatDate(p.createdAt)}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderActivity(activity) {
+            const list = el("activity-list");
+            list.innerHTML = "";
+            if (!activity.length) {
+                list.innerHTML = `<div class="activity-item warn">No activity yet.</div>`;
+                return;
+            }
+            activity.slice(0, 60).forEach((a) => {
+                const div = document.createElement("div");
+                div.className = "activity-item";
+                div.innerHTML = `<div>${a.label}</div><div class="small">${a.email || "system"} - ${formatDate(a.timestamp)}</div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function renderChatUsers(chats) {
+            const select = el("chat-user");
+            const users = Object.keys(chats || {});
+            select.innerHTML = users.length ? "" : `<option value="">No chat users</option>`;
+            users.forEach((email) => {
+                const op = document.createElement("option");
+                op.value = email;
+                op.textContent = email;
+                select.appendChild(op);
+            });
+            select.onchange = () => renderChat(select.value);
+            if (users.length) renderChat(users[0]);
+        }
+
+        function renderChat(email) {
+            const box = el("chat-box");
+            const logs = state.data?.chats?.[email] || [];
+            if (!logs.length) {
+                box.innerHTML = `<div class="small">No messages for this user.</div>`;
+                return;
+            }
+            box.innerHTML = "";
+            logs.forEach((m) => {
+                const div = document.createElement("div");
+                const safe = (m.content || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                div.className = "m";
+                div.innerHTML = `<b>${m.role}</b>: ${safe}<div class="small">${formatDate(m.timestamp)}</div>`;
+                box.appendChild(div);
+            });
+        }
+
+        async function loadDashboard() {
+            try {
+                const data = await fetchOverview();
+                state.data = data;
+                renderMetrics(data.summary);
+                renderUsers(data.users || []);
+                renderProducts(data.products || []);
+                renderActivity(data.activity || []);
+                renderChatUsers(data.chats || {});
+                el("status-line").textContent = `Updated ${new Date().toLocaleTimeString()} - value: ${formatMoney(data.summary.marketplaceValue)}`;
+            } catch (err) {
+                el("status-line").textContent = `Failed to load admin data: ${err.message}`;
+            }
+        }
+
+        el("refresh-btn").addEventListener("click", loadDashboard);
+        loadDashboard();
+    </script>
+</body>
+</html>

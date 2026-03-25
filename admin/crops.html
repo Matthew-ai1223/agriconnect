@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crops Management - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li class="active" onclick="location.href='crops.html'"><i class="fa fa-seedling"></i>
+                    <span>Crops</span>
+                </li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span>
+                </li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet
+                        Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search crops in your inventory...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i></div>
+                </div>
+            </header>
+
+            <div class="page-header">
+                <h1>Crops Management</h1>
+                <button class="primary-btn"><i class="fa fa-plus"></i> Add New Crop</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <section class="stats">
+                <div class="card">
+                    <p><i class="fa fa-boxes" style="color: var(--primary)"></i> Total Stock</p>
+                    <h3>2,450 kg</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-check-circle" style="color: var(--primary)"></i> Available Items</p>
+                    <h3>18</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-exclamation-triangle" style="color: var(--accent)"></i> Low Stock Alerts</p>
+                    <h3>3</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-tags" style="color: #3b82f6"></i> Market Value</p>
+                    <h3>₦1.2M</h3>
+                </div>
+            </section>
+
+            <section class="dashboard-section" style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0;">Inventory Filters</h3>
+                </div>
+                <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="form-group">
+                        <select>
+                            <option>All Categories</option>
+                            <option>Grains</option>
+                            <option>Vegetables</option>
+                            <option>Tubers</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select>
+                            <option>Stock Status</option>
+                            <option>In Stock</option>
+                            <option>Low Stock</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Min Price">
+                    </div>
+                    <div class="form-group">
+                        <button class="secondary-btn" style="height: 44px; width: 100%;">Apply Filters</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr;">
+                <!-- Main Table -->
+                <section class="dashboard-section">
+                    <h3>All Crops</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Crop Name</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Price/kg</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 600;">Golden Maize</td>
+                                    <td>Grain</td>
+                                    <td>450 kg</td>
+                                    <td>₦450</td>
+                                    <td><span class="status-badge available">In Stock</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-btn"><i class="fa fa-edit"></i></button>
+                                            <button class="delete-btn"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Premium Rice</td>
+                                    <td>Grain</td>
+                                    <td>120 kg</td>
+                                    <td>₦600</td>
+                                    <td><span class="status-badge low-stock">Low Stock</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-btn"><i class="fa fa-edit"></i></button>
+                                            <button class="delete-btn"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                <tr>
+                                    <td style="font-weight: 600;">Habanero Pepper</td>
+                                    <td>Vegetable</td>
+                                    <td>45 kg</td>
+                                    <td>₦1,500</td>
+                                    <td><span class="status-badge low-stock">Low Stock</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-btn"><i class="fa fa-edit"></i></button>
+                                            <button class="delete-btn"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Sweet Potatoes</td>
+                                    <td>Tuber</td>
+                                    <td>250 kg</td>
+                                    <td>₦350</td>
+                                    <td><span class="status-badge available">In Stock</span></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="edit-btn"><i class="fa fa-edit"></i></button>
+                                            <button class="delete-btn"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Action Panel -->
+                <section class="dashboard-section">
+                    <h3>Quick Add</h3>
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <div class="form-group">
+                            <label>Crop Name</label>
+                            <input type="text" placeholder="e.g. Tomatoes">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select>
+                                <option>Select category</option>
+                                <option>Grains</option>
+                                <option>Vegetables</option>
+                                <option>Fruits</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity (kg)</label>
+                            <input type="number" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Price per unit</label>
+                            <input type="number" placeholder="₦ 0.00">
+                        </div>
+                        <button class="primary-btn" style="margin-top: 10px; width: 100%;">Save to Inventory</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

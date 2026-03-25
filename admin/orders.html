@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li class="active" onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span></li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search orders, buyers, tracking IDs...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i></div>
+                </div>
+            </header>
+
+            <div class="page-header">
+                <h1>Orders Management</h1>
+                <div class="btn-group">
+                    <button class="secondary-btn"><i class="fa fa-file-export"></i> Export CSV</button>
+                    <button class="primary-btn"><i class="fa fa-print"></i> Print Labels</button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <section class="stats">
+                <div class="card">
+                    <p><i class="fa fa-shopping-cart" style="color: var(--primary)"></i> Total Orders</p>
+                    <h3>142</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-clock" style="color: var(--accent)"></i> Pending</p>
+                    <h3>12</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-truck" style="color: #3b82f6"></i> Shipped</p>
+                    <h3>24</h3>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-check-double" style="color: var(--primary)"></i> Completed</p>
+                    <h3>106</h3>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h3 style="margin: 0;">Order History</h3>
+                    <div class="action-btns">
+                        <button class="secondary-btn" style="padding: 6px 12px; font-size: 13px;">Filter by Status <i class="fa fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Buyer Name</th>
+                                <th>Crop</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600;">#ORD-2026-001</td>
+                                <td>John Adeyemi</td>
+                                <td>Golden Maize</td>
+                                <td>500 kg</td>
+                                <td>₦225,000</td>
+                                <td><span class="status-badge delivered">Delivered</span></td>
+                                <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600;">#ORD-2026-002</td>
+                                <td>Sarah Johnson</td>
+                                <td>Premium Rice</td>
+                                <td>200 kg</td>
+                                <td>₦120,000</td>
+                                <td><span class="status-badge processing">Processing</span></td>
+                                <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600;">#ORD-2026-003</td>
+                                <td>Michael Chen</td>
+                                <td>White Yam</td>
+                                <td>50 kg</td>
+                                <td>₦60,000</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600;">#ORD-2026-004</td>
+                                <td>Olawale Ibrahim</td>
+                                <td>Cassava</td>
+                                <td>1,000 kg</td>
+                                <td>₦300,000</td>
+                                <td><span class="status-badge delivered">Delivered</span></td>
+                                <td><button class="secondary-btn" style="padding: 5px 10px; font-size: 12px;">View Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

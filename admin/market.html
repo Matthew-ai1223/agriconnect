@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Prices - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li class="active" onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span></li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa fa-search"></i>
+                    <input type="search" placeholder="Search market trends and price history...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i></div>
+                </div>
+            </header>
+
+            <div class="page-header">
+                <h1>Market Insights</h1>
+                <div class="btn-group">
+                    <button class="secondary-btn"><i class="fa fa-sync-alt"></i> Refresh Live Feed</button>
+                    <button class="primary-btn"><i class="fa fa-download"></i> Export Market Data</button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <section class="stats">
+                <div class="card">
+                    <p><i class="fa fa-chart-line" style="color: var(--primary)"></i> Global Index</p>
+                    <h3>+4.2%</h3>
+                    <span class="trend up">Rising</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-star" style="color: var(--accent)"></i> Top Gainer</p>
+                    <h3>Onions</h3>
+                    <span class="trend up">+18.0%</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-arrow-down" style="color: #ef4444"></i> Biggest Drop</p>
+                    <h3>Tomatoes</h3>
+                    <span class="trend down">-12.5%</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-location-dot" style="color: #3b82f6"></i> Peak Market</p>
+                    <h3>Lagos</h3>
+                    <span class="trend up">High Vol.</span>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <!-- Live Price Table -->
+                <section class="dashboard-section" style="grid-column: span 2;">
+                    <h3>Live Price Feed <span style="font-size: 12px; color: var(--text-muted); font-weight: 400;">(Updated 5 mins ago)</span></h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Commodity</th>
+                                    <th>Current Price</th>
+                                    <th>Prev. Price</th>
+                                    <th>Trend</th>
+                                    <th>Volatility</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 600;">Maize (Grain)</td>
+                                    <td>₦450/kg</td>
+                                    <td>₦410/kg</td>
+                                    <td><span class="status-badge delivered" style="background: #ecfdf5; color: #059669"><i class="fa fa-caret-up"></i> +₦40</span></td>
+                                    <td>Low</td>
+                                    <td><button class="edit-btn">Alert Me</button></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Rice (Premium)</td>
+                                    <td>₦600/kg</td>
+                                    <td>₦580/kg</td>
+                                    <td><span class="status-badge delivered" style="background: #ecfdf5; color: #059669"><i class="fa fa-caret-up"></i> +₦20</span></td>
+                                    <td>Moderate</td>
+                                    <td><button class="edit-btn">Alert Me</button></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Yam (White)</td>
+                                    <td>₦1,200/u</td>
+                                    <td>₦1,250/u</td>
+                                    <td><span class="status-badge out-of-stock" style="background: #fef2f2; color: #dc2626"><i class="fa fa-caret-down"></i> -₦50</span></td>
+                                    <td>High</td>
+                                    <td><button class="edit-btn">Alert Me</button></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Cassava (Tuber)</td>
+                                    <td>₦300/kg</td>
+                                    <td>₦300/kg</td>
+                                    <td><span class="status-badge pending" style="background: #fffbeb; color: #d97706">Stable</span></td>
+                                    <td>Low</td>
+                                    <td><button class="edit-btn">Alert Me</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Market Trends Chart -->
+                <section class="dashboard-section">
+                    <h3>Commodity Trends</h3>
+                    <div class="chart-container">
+                        <div class="bar" style="height: 40%; background: #3b82f6;" data-label="Wheat"></div>
+                        <div class="bar" style="height: 75%; background: #10b981;" data-label="Rice"></div>
+                        <div class="bar" style="height: 55%; background: #f59e0b;" data-label="Maize"></div>
+                        <div class="bar" style="height: 90%; background: #8b5cf6;" data-label="Cocoa"></div>
+                    </div>
+                </section>
+
+                <!-- Prediction Card -->
+                <section class="dashboard-section">
+                    <h3>AI Forecast</h3>
+                    <div style="background: #f0fdf4; padding: 20px; border-radius: 12px; border: 1px dashed var(--primary);">
+                        <p style="font-size: 14px; color: var(--secondary); font-weight: 600; margin-bottom: 10px;">
+                            <i class="fa fa-robot"></i> Price Projection
+                        </p>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                            Based on regional rainfall and supply chain data, we expect a **12% dip** in grain prices over the next 14 days. Recommend selling now before the floor drops.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
