@@ -468,45 +468,32 @@ window.selectRole = function (button) {
 
 // PWA Install Prompt Logic
 let deferredPrompt;
+let installPopupTimer;
+
+function isRunningAsInstalledPwa() {
+    return window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+}
+
+function scheduleInstallPopup() {
+    if (isRunningAsInstalledPwa()) return;
+    if (installPopupTimer) clearTimeout(installPopupTimer);
+    installPopupTimer = setTimeout(() => {
+        installPopupTimer = null;
+        openModal('install-popup');
+    }, 2000);
+}
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later.
     deferredPrompt = e;
-
-    // Show the popup automatically after 2 seconds for every new visit
-    if (!sessionStorage.getItem('installDismissed')) {
-        setTimeout(() => {
-            openModal('install-popup');
-        }, 2000);
-    }
 });
 
-// Handle Install Button Click
-document.addEventListener('DOMContentLoaded', () => {
-    const installBtn = document.getElementById('install-btn');
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            // Hide the application provided install prompt
-            closeModal('install-popup');
-
-            if (deferredPrompt) {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                // We've used the prompt, and can't use it again, throw it away
-                deferredPrompt = null;
-            }
-        });
-    }
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) scheduleInstallPopup();
 });
 
-// Handle Dismissal
+// Handle Dismissal (no local/session storage — popup shows again on next open or refresh)
 window.dismissInstall = function () {
     closeModal('install-popup');
-    // Save dismissal state for this session only so it shows on next visit
-    sessionStorage.setItem('installDismissed', 'true');
 };
