@@ -70,11 +70,6 @@
                     <option value="http://localhost:3000/api">Local API (http://localhost:3000/api)</option>
                     <option value="https://farm-ai-iota.vercel.app/api" selected>Production API (farm-ai-iota.vercel.app/api)</option>
                 </select>
-                <div class="field" style="margin:0; flex:1; min-width:200px;">
-                    <label for="admin-key">Admin API key (edit/delete products)</label>
-                    <input type="password" id="admin-key" placeholder="ADMIN_API_KEY from server env" autocomplete="off">
-                </div>
-                <button type="button" class="btn-outline" id="save-key-btn" title="Store key in this browser session only">Remember key</button>
                 <button class="btn" id="refresh-btn">Refresh Data</button>
                 <a class="btn-outline" href="http://agriconnect.gt.tc/admin.html" target="_blank" rel="noopener noreferrer">AgriConnect Admin</a>
                 <a class="btn-outline" href="https://my-farm-ai.vercel.app/admin09890.html" target="_blank" rel="noopener noreferrer">MyFarm AI Admin</a>
@@ -119,11 +114,31 @@
 
         <section class="card" style="margin-top:14px;">
             <h2 class="panel-title">User Products</h2>
-            <p class="small" style="margin:-6px 0 12px 0;">Edit or delete any listing when a valid admin key is set (server <code style="color:#9be7ca;">ADMIN_API_KEY</code>).</p>
+            <p class="small" style="margin:-6px 0 12px 0;">Send push alerts to all app users for new marketplace updates.</p>
+            <div class="row" style="margin-bottom: 12px;">
+                <button type="button" class="btn-sm btn-edit" id="push-new-product">New Product Alert</button>
+                <button type="button" class="btn-sm btn-edit" id="push-new-consultant">New Consultant Alert</button>
+                <button type="button" class="btn-sm btn-outline" id="push-test" style="background:transparent;">Test Push</button>
+            </div>
+            <div class="row" style="margin-bottom: 12px; align-items:flex-end;">
+                <div class="field" style="margin:0; flex: 1; min-width: 220px;">
+                    <label for="push-title">General title</label>
+                    <input type="text" id="push-title" placeholder="Update from MyFarmAI" autocomplete="off">
+                </div>
+                <div class="field" style="margin:0; flex: 2; min-width: 260px;">
+                    <label for="push-body">General message</label>
+                    <input type="text" id="push-body" placeholder="Your update is ready — check the app." autocomplete="off">
+                </div>
+                <div class="field" style="margin:0; flex: 1; min-width: 160px;">
+                    <label for="push-url">URL (optional)</label>
+                    <input type="text" id="push-url" placeholder="/" autocomplete="off">
+                </div>
+                <button type="button" class="btn-sm btn-edit" id="push-general" style="height: 40px;">Send General</button>
+            </div>
             <div class="table-wrap">
                 <table>
                     <thead>
-                        <tr><th>Product</th><th>Category</th><th>Price</th><th>Seller</th><th>Created</th><th>Actions</th></tr>
+                        <tr><th>Product</th><th>Category</th><th>Price</th><th>Seller</th><th>Created</th></tr>
                     </thead>
                     <tbody id="products-body"></tbody>
                 </table>
@@ -176,8 +191,14 @@
 
     <script>
         const state = { data: null };
-        const ADMIN_KEY_STORAGE = "agriconnect_admin_api_key";
         const el = (id) => document.getElementById(id);
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;");
+        }
         const formatN = (n) => new Intl.NumberFormat().format(n || 0);
         const formatMoney = (n) => `N${formatN(Math.round(Number(n || 0)))}`;
         const formatDate = (d) => d ? new Date(d).toLocaleString() : "-";
@@ -211,24 +232,16 @@
 
         function renderProducts(products) {
             const tbody = el("products-body");
-            tbody.innerHTML = products.length ? "" : `<tr><td colspan="6" class="warn">No products found.</td></tr>`;
+            tbody.innerHTML = products.length ? "" : `<tr><td colspan="5" class="warn">No products found.</td></tr>`;
             products.forEach((p) => {
                 const tr = document.createElement("tr");
                 const seller = p.sellerEmail || "-";
-                tr.innerHTML = `<td>${esc(p.title || "Untitled")}</td><td><span class="pill">${esc(p.category || "General")}</span></td><td>${formatMoney(p.price)}</td><td>${esc(seller)}</td><td>${formatDate(p.createdAt)}</td><td class="actions"></td>`;
-                const act = tr.querySelector(".actions");
-                const edit = document.createElement("button");
-                edit.type = "button";
-                edit.className = "btn-sm btn-edit";
-                edit.textContent = "Edit";
-                edit.addEventListener("click", () => openProductModal(p));
-                const del = document.createElement("button");
-                del.type = "button";
-                del.className = "btn-sm btn-del";
-                del.textContent = "Delete";
-                del.addEventListener("click", () => deleteAdminProduct(p));
-                act.appendChild(edit);
-                act.appendChild(del);
+                tr.innerHTML =
+                    `<td>${esc(p.title || "Untitled")}</td>` +
+                    `<td><span class="pill">${esc(p.category || "General")}</span></td>` +
+                    `<td>${formatMoney(p.price)}</td>` +
+                    `<td>${esc(seller)}</td>` +
+                    `<td>${formatDate(p.createdAt)}</td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -373,16 +386,61 @@
         }
 
         el("refresh-btn").addEventListener("click", loadDashboard);
-        el("save-key-btn").addEventListener("click", () => {
-            const v = el("admin-key").value.trim();
-            if (v) sessionStorage.setItem(ADMIN_KEY_STORAGE, v);
-            else sessionStorage.removeItem(ADMIN_KEY_STORAGE);
-            el("status-line").textContent = v ? "Admin key saved for this browser session." : "Admin key cleared from session.";
-        });
-        (function initAdminKey() {
-            const saved = sessionStorage.getItem(ADMIN_KEY_STORAGE);
-            if (saved) el("admin-key").value = saved;
-        })();
+
+        async function broadcastPush(type, payloadOverride = null) {
+            const base = el("api-select").value;
+            el("status-line").textContent = "Sending push…";
+            try {
+                const custom = payloadOverride || {};
+                const payload = {
+                    type,
+                    title:
+                        custom.title ||
+                        (type === 'new_product'
+                            ? 'New product listed'
+                            : type === 'new_consultant'
+                              ? 'New consultant added'
+                              : 'MyFarmAI Update'),
+                    body:
+                        custom.body ||
+                        (type === 'new_product'
+                            ? 'A new product is now available in the Marketplace.'
+                            : type === 'new_consultant'
+                              ? 'A new consultant is now available in Vet Connect.'
+                              : 'Your update is ready — open the app to view it.'),
+                    url: custom.url || '/'
+                };
+                const res = await fetch(`${base}/notifications/broadcast`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json().catch(() => ({}));
+                if (!res.ok || json.status !== "success") {
+                    throw new Error(json.message || json.error || `HTTP ${res.status}`);
+                }
+                el("status-line").textContent = `Push sent (subscribers: ${json.sent || 0}).`;
+            } catch (err) {
+                el("status-line").textContent = `Push failed: ${err.message}`;
+            }
+        }
+
+        el("push-new-product").addEventListener("click", () => broadcastPush("new_product"));
+        el("push-new-consultant").addEventListener("click", () => broadcastPush("new_consultant"));
+        el("push-test").addEventListener("click", () =>
+            broadcastPush("test", { title: "MyFarmAI Test Alert", body: "If you see this, push notifications are working!", url: "/" })
+        );
+
+        const pushGeneralBtn = el("push-general");
+        if (pushGeneralBtn) {
+            pushGeneralBtn.addEventListener("click", () => {
+                const title = el("push-title")?.value?.trim() || "MyFarmAI Update";
+                const body = el("push-body")?.value?.trim() || "Your update is ready — open the app to view it.";
+                const url = el("push-url")?.value?.trim() || "/";
+                broadcastPush("general", { title, body, url });
+            });
+        }
+
         loadDashboard();
     </script>
 </body>
