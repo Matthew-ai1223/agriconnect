@@ -974,6 +974,18 @@ label {
     line-height: 1;
 }
 
+/* Make the cart cancel/close button red on all screens */
+#cart-panel .cart-drawer-close {
+    color: var(--error);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+#cart-panel .cart-drawer-close:hover {
+    color: white;
+    background: rgba(239, 68, 68, 0.18);
+    border-color: rgba(239, 68, 68, 0.6);
+}
+
 .cart-drawer-items {
     flex: 1;
     overflow-y: auto;

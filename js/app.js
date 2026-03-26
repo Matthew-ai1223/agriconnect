@@ -48,6 +48,87 @@ document.addEventListener('DOMContentLoaded', () => {
         sellImageRemove.addEventListener('click', () => resetSellImageUI());
     }
 
+    // Mobile swipe navigation: swipe left = next section, swipe right = back
+    function isMobileSwipeEnabled() {
+        return window.innerWidth < 768;
+    }
+
+    function isAnyOverlayOpen() {
+        const cartOpen = document.getElementById('cart-panel')?.classList.contains('open');
+        const anyModalOpen = Boolean(document.querySelector('.modal-backdrop.open'));
+        return cartOpen || anyModalOpen;
+    }
+
+    function shouldIgnoreSwipeTarget(target) {
+        if (!target || !target.closest) return true;
+        const tag = target.tagName;
+        if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(tag)) return true;
+        if (target.closest('input,textarea,select,button,a')) return true;
+        if (target.closest('.modal-backdrop') || target.closest('#cart-panel')) return true;
+        return false;
+    }
+
+    const sectionOrder = ['home', 'ai-chat', 'market', 'consult'];
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTarget = null;
+
+    document.addEventListener(
+        'touchstart',
+        (e) => {
+            if (!isMobileSwipeEnabled()) return;
+            if (isAnyOverlayOpen()) return;
+
+            const t = e.target;
+            if (shouldIgnoreSwipeTarget(t)) return;
+
+            const touch = e.touches && e.touches[0];
+            if (!touch) return;
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchStartTarget = t;
+        },
+        { passive: true }
+    );
+
+    document.addEventListener(
+        'touchend',
+        (e) => {
+            if (!isMobileSwipeEnabled()) return;
+            if (isAnyOverlayOpen()) return;
+            if (!touchStartTarget) return;
+
+            const touch = e.changedTouches && e.changedTouches[0];
+            if (!touch) return;
+
+            const dx = touch.clientX - touchStartX;
+            const dy = touch.clientY - touchStartY;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+
+            // Require horizontal intent
+            if (absDx < 60 || absDx < absDy * 1.2) return;
+
+            const cur = state.currentSection || 'home';
+            const curIndex = sectionOrder.indexOf(cur);
+            const safeIndex = curIndex >= 0 ? curIndex : 0;
+
+            if (dx < 0) {
+                // swipe left => next
+                const nextIndex = Math.min(safeIndex + 1, sectionOrder.length - 1);
+                const next = sectionOrder[nextIndex];
+                if (next && next !== cur) showSection(next);
+            } else {
+                // swipe right => back
+                const prevIndex = Math.max(safeIndex - 1, 0);
+                const prev = sectionOrder[prevIndex];
+                if (prev && prev !== cur) showSection(prev);
+            }
+            touchStartTarget = null;
+        },
+        { passive: true }
+    );
+
     scheduleInstallPopup();
     const installBtn = document.getElementById('install-btn');
     if (installBtn) {
@@ -72,6 +153,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.log('Service Worker Failed', err));
         });
     }
+
+    // Push Notifications
+    window.enableNotifications = async function () {
+        try {
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                showToast('Push notifications are not supported on this device.', 'error');
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                showToast('Notification permission was denied.', 'error');
+                return;
+            }
+
+            const reg = await navigator.serviceWorker.ready;
+            const existing = await reg.pushManager.getSubscription();
+            if (existing) {
+                showToast('Notifications already enabled.', 'success');
+                return;
+            }
+
+            const pkRes = await fetch(`${API_BASE}/notifications/vapid-public-key`);
+            const pkJson = await pkRes.json().catch(() => ({}));
+            const publicKey = pkJson.publicKey || '';
+            if (!publicKey) {
+                showToast('Server is missing VAPID public key. Ask admin to set it.', 'error');
+                return;
+            }
+
+            const convertedKey = urlBase64ToUint8Array(publicKey);
+            const newSub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: convertedKey
+            });
+
+            const subRes = await fetch(`${API_BASE}/notifications/subscribe`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSub)
+            });
+            const subJson = await subRes.json().catch(() => ({}));
+            if (!subRes.ok || subJson.status !== 'success') {
+                throw new Error(subJson.message || 'Could not save subscription.');
+            }
+
+            showToast('Notifications enabled!', 'success');
+        } catch (err) {
+            showToast(err.message || 'An error occurred. Please try again.', 'error');
+        }
+    };
+
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const rawData = atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+        for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+        return outputArray;
+    }
+
+    const notifBtn = document.getElementById('notif-btn');
+    if (notifBtn) notifBtn.classList.remove('d-none');
 });
 
 // Navigation Logic

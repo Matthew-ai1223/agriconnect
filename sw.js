@@ -27,3 +27,34 @@ self.addEventListener('fetch', (e) => {
         })
     );
 });
+
+// Push Notifications
+self.addEventListener('push', (event) => {
+    let data = {};
+    try {
+        if (event.data) data = event.data.json();
+    } catch (e) {
+        data = {};
+    }
+
+    const title = data.title || 'MyFarmAI';
+    const body = data.body || 'New update available.';
+    const url = data.url || '/';
+
+    const options = {
+        body,
+        tag: data.type || 'myfarmai-update',
+        data: { url },
+        // Use your app icon if available
+        icon: '/images/icon-192.png',
+        badge: '/images/icon-192.png'
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = event.notification?.data?.url || '/';
+    event.waitUntil(clients.openWindow(url));
+});
