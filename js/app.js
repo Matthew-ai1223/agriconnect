@@ -139,11 +139,82 @@ async function fetchProducts() {
         if (data.status === 'success') {
             state.products = data.data || [];
             rebuildMarketCategoryOptions();
+            populateHomeTopProducts();
             applyMarketFilter();
         }
     } catch (err) {
         console.error('Failed to fetch products:', err);
     }
+}
+
+function populateHomeTopProducts() {
+    const container = document.getElementById('home-top-products');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const list = (state.products || []).slice(0, 4);
+    if (!list.length) {
+        container.innerHTML =
+            '<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">No products yet.</p>';
+        return;
+    }
+
+    const userEmail = state.currentUser?.email?.toLowerCase() || '';
+
+    list.forEach((product) => {
+        const rawImg = product.image;
+        const imgUrl =
+            rawImg != null && String(rawImg).trim() !== '' ? String(rawImg).trim() : '';
+        const finalImage = imgUrl || getCategoryPlaceholder(product.category);
+
+        const sellerEmail = (product.sellerEmail || '').toLowerCase();
+        const isOwner = Boolean(userEmail && sellerEmail && userEmail === sellerEmail);
+
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.setAttribute('role', 'listitem');
+
+        const img = document.createElement('img');
+        img.src = finalImage;
+        img.alt = product.title || '';
+        img.className = 'product-img';
+        img.loading = 'lazy';
+        img.style.height = '140px';
+        img.decoding = 'async';
+        img.referrerPolicy = 'no-referrer';
+        img.onerror = function () {
+            img.onerror = null;
+            img.src = getCategoryPlaceholder(product.category);
+        };
+
+        const details = document.createElement('div');
+        details.className = 'product-details';
+        details.style.padding = '1rem';
+
+        const titleSafe = escapeHtml(product.title);
+        const catSafe = escapeHtml(product.category || '');
+        details.innerHTML = `
+            <div class="product-price">₦${Number(product.price).toLocaleString()}</div>
+            <div class="text-sm mb-1" style="font-weight:600; font-size:0.95rem;">${titleSafe}</div>
+            <div class="text-xs text-muted mb-2">${catSafe}</div>
+        `;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = isOwner ? 'btn btn-outline text-xs' : 'btn btn-primary text-xs';
+        btn.style.cssText = 'width: 100%; padding: 0.6rem; margin-top: 0.25rem;';
+        btn.textContent = isOwner ? 'Manage listing' : 'Add to cart';
+        btn.addEventListener('click', () => {
+            if (isOwner) showSection('market');
+            else addToCart(product.id);
+        });
+
+        details.appendChild(btn);
+
+        card.appendChild(img);
+        card.appendChild(details);
+        container.appendChild(card);
+    });
 }
 
 function rebuildMarketCategoryOptions() {
