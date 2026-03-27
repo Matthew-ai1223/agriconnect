@@ -4,7 +4,11 @@ const state = {
     authMode: 'login', // 'login' or 'signup'
     products: [],
     vets: [],
-    cart: []
+    cart: [],
+    isProductsLoading: true,
+    isVetsLoading: true,
+    productsLoadFailed: false,
+    vetsLoadFailed: false
 };
 
 // API: use local backend on localhost (for Cloudinary upload + API during dev)
@@ -276,28 +280,100 @@ function escapeHtml(text) {
     return d.innerHTML;
 }
 
+function renderHomeProductSkeletons() {
+    const container = document.getElementById('home-top-products');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="home-skeleton-card">
+            <div class="skeleton-block skeleton-image"></div>
+            <div class="home-skeleton-body">
+                <div class="skeleton-block skeleton-line lg"></div>
+                <div class="skeleton-block skeleton-line md"></div>
+                <div class="skeleton-block skeleton-line sm"></div>
+            </div>
+        </div>
+        <div class="home-skeleton-card">
+            <div class="skeleton-block skeleton-image"></div>
+            <div class="home-skeleton-body">
+                <div class="skeleton-block skeleton-line lg"></div>
+                <div class="skeleton-block skeleton-line md"></div>
+                <div class="skeleton-block skeleton-line sm"></div>
+            </div>
+        </div>
+        <div class="home-skeleton-card">
+            <div class="skeleton-block skeleton-image"></div>
+            <div class="home-skeleton-body">
+                <div class="skeleton-block skeleton-line lg"></div>
+                <div class="skeleton-block skeleton-line md"></div>
+                <div class="skeleton-block skeleton-line sm"></div>
+            </div>
+        </div>
+    `;
+}
+
+function renderHomeVetSkeletons() {
+    const container = document.getElementById('home-vets');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="vet-card home-vet-skeleton">
+            <div class="vet-avatar"><div class="skeleton-block skeleton-circle"></div></div>
+            <div style="flex: 1;">
+                <div class="skeleton-block skeleton-line lg"></div>
+                <div class="skeleton-block skeleton-line md"></div>
+                <div class="skeleton-block skeleton-line sm"></div>
+            </div>
+            <div class="skeleton-block skeleton-button"></div>
+        </div>
+        <div class="vet-card home-vet-skeleton">
+            <div class="vet-avatar"><div class="skeleton-block skeleton-circle"></div></div>
+            <div style="flex: 1;">
+                <div class="skeleton-block skeleton-line lg"></div>
+                <div class="skeleton-block skeleton-line md"></div>
+                <div class="skeleton-block skeleton-line sm"></div>
+            </div>
+            <div class="skeleton-block skeleton-button"></div>
+        </div>
+    `;
+}
+
 async function fetchProducts() {
     try {
         const res = await fetch(`${API_BASE}/products`);
         const data = await res.json();
         if (data.status === 'success') {
             state.products = data.data || [];
+            state.productsLoadFailed = false;
             rebuildMarketCategoryOptions();
             populateHomeTopProducts();
             applyMarketFilter();
         }
     } catch (err) {
+        state.productsLoadFailed = true;
         console.error('Failed to fetch products:', err);
+    } finally {
+        state.isProductsLoading = false;
+        populateHomeTopProducts();
     }
 }
 
 function populateHomeTopProducts() {
     const container = document.getElementById('home-top-products');
     if (!container) return;
+
+    if (state.isProductsLoading) {
+        renderHomeProductSkeletons();
+        return;
+    }
+
     container.innerHTML = '';
 
     const list = (state.products || []).slice(0, 4);
     if (!list.length) {
+        if (state.productsLoadFailed) {
+            container.innerHTML =
+                '<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">Could not load products right now.</p>';
+            return;
+        }
         container.innerHTML =
             '<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">No products yet.</p>';
         return;
@@ -398,10 +474,15 @@ async function fetchVets() {
         const data = await res.json();
         if (data.status === 'success') {
             state.vets = data.data;
+            state.vetsLoadFailed = false;
             populateVets();
         }
     } catch (err) {
+        state.vetsLoadFailed = true;
         console.error('Failed to fetch vets:', err);
+    } finally {
+        state.isVetsLoading = false;
+        populateVets();
     }
 }
 
@@ -538,7 +619,22 @@ function getCategoryPlaceholder(category) {
 function populateVets() {
     const container = document.getElementById('home-vets');
     if (!container) return;
+
+    if (state.isVetsLoading) {
+        renderHomeVetSkeletons();
+        return;
+    }
+
     container.innerHTML = '';
+
+    if (!state.vets.length) {
+        if (state.vetsLoadFailed) {
+            container.innerHTML = '<p class="text-xs text-muted">Could not load consultants right now.</p>';
+            return;
+        }
+        container.innerHTML = '<p class="text-xs text-muted">No consultants available yet.</p>';
+        return;
+    }
 
     state.vets.forEach(vet => {
         const spec = vet.specialization || vet.specialty || '';
