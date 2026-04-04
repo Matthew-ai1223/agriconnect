@@ -1,6 +1,6 @@
 {
-  "name": "MyFarmAI",
-  "short_name": "MyFarmAI",
+  "name": "My FarmAI",
+  "short_name": "My FarmAI",
   "id": "/",
   "start_url": "./index.html",
   "scope": "./",
