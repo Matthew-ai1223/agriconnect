@@ -335,6 +335,27 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     transform: translateY(0) scale(0.98);
 }
 
+#auth-submit-btn.is-loading {
+    opacity: 0.9;
+    cursor: wait;
+}
+
+#auth-submit-btn .btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: auth-btn-spin 0.7s linear infinite;
+}
+
+@keyframes auth-btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .btn-outline {
     background: transparent;
     border: 2px solid var(--primary);

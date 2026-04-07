@@ -932,6 +932,25 @@ function updateSignupLegalVisibility() {
     }
 }
 
+function getAuthSubmitLabel() {
+    return state.authMode === 'signup' ? 'Start My Journey' : 'Secure Login';
+}
+
+function setAuthSubmitting(isSubmitting) {
+    const submitBtn = document.getElementById('auth-submit-btn');
+    if (!submitBtn) return;
+
+    if (isSubmitting) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('is-loading');
+        submitBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>&nbsp;Please wait...';
+    } else {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
+        submitBtn.textContent = getAuthSubmitLabel();
+    }
+}
+
 window.toggleAuthMode = function () {
     state.authMode = state.authMode === 'login' ? 'signup' : 'login';
     const title = document.getElementById('auth-title');
@@ -950,6 +969,7 @@ window.toggleAuthMode = function () {
         toggleText.textContent = 'New to MyFarmAI?';
         toggleLink.textContent = 'Create Account';
     }
+    setAuthSubmitting(false);
     updateSignupLegalVisibility();
 };
 
@@ -1010,7 +1030,7 @@ window.handleAuthSubmit = async function (e) {
         payload.aiDataConsent = consent.value;
     }
 
-    if (submitBtn) submitBtn.disabled = true;
+    setAuthSubmitting(true);
     try {
         const res = await fetch(`${API_BASE}/auth`, {
             method: 'POST',
@@ -1044,7 +1064,7 @@ window.handleAuthSubmit = async function (e) {
         setAuthError(msg);
         showToast(msg, 'error');
     } finally {
-        if (submitBtn) submitBtn.disabled = false;
+        setAuthSubmitting(false);
     }
 };
 
