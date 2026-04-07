@@ -1,153 +1,552 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriConnect Admin Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Vet Connect Admin - MyFarm-AI Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --bg:#0a1013; --panel:#111a1f; --panel2:#15232b; --text:#f2f7fa; --muted:#91a3af; --brand:#10b981; --line:#233640; --warn:#f59e0b; }
-        * { box-sizing: border-box; }
-        body { margin:0; font-family:Inter,sans-serif; background:var(--bg); color:var(--text); }
-        .wrap { max-width:1400px; margin:0 auto; padding:24px; }
-        .top { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
-        .title { font-size:24px; font-weight:800; }
-        .small { color:var(--muted); font-size:13px; }
-        .btn { background:var(--brand); color:#032016; border:0; font-weight:700; border-radius:10px; padding:10px 14px; cursor:pointer; }
-        .btn-outline { display:inline-flex; align-items:center; background:transparent; color:var(--text); border:1px solid var(--line); font-weight:600; border-radius:10px; padding:10px 14px; cursor:pointer; text-decoration:none; font-size:14px; }
-        .btn-outline:hover { border-color:var(--brand); color:var(--brand); }
-        .grid4 { display:grid; gap:14px; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:14px; }
-        .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
-        .card h3 { margin:0 0 6px 0; font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; }
-        .metric { font-size:28px; font-weight:800; }
-        .main { display:grid; grid-template-columns: 1.1fr 1.2fr .9fr; gap:14px; }
-        .panel-title { margin:0 0 12px 0; font-size:15px; font-weight:700; }
-        .table-wrap, .list { max-height:420px; overflow:auto; }
-        table { width:100%; border-collapse:collapse; font-size:13px; }
-        th, td { text-align:left; border-bottom:1px solid var(--line); padding:10px 8px; vertical-align:top; }
-        th { color:var(--muted); font-weight:600; position:sticky; top:0; background:var(--panel); }
-        .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; background:var(--panel2); color:#bdebd8; border:1px solid #245143; }
-        .activity-item { border-bottom:1px solid var(--line); padding:10px 0; font-size:13px; }
-        .activity-item:last-child { border-bottom:0; }
-        .chat-box { max-height:420px; overflow:auto; background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px; }
-        .m { margin-bottom:8px; font-size:13px; line-height:1.45; }
-        .m b { color:#9be7ca; }
-        .row { display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
-        input, select { background:#0b1419; border:1px solid var(--line); color:var(--text); border-radius:10px; padding:8px 10px; }
-        .warn { color:var(--warn); }
-        .actions { white-space:nowrap; }
-        .btn-sm { padding:6px 10px; font-size:12px; border-radius:8px; cursor:pointer; font-weight:600; border:0; }
-        .btn-edit { background:#1e3a2f; color:#9be7ca; border:1px solid #245143; }
-        .btn-edit:hover { border-color:var(--brand); }
-        .btn-del { background:#3f1515; color:#fecaca; border:1px solid #7f1d1d; margin-left:6px; }
-        .btn-del:hover { border-color:#f87171; }
-        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:100; align-items:center; justify-content:center; padding:16px; }
-        .modal-overlay.open { display:flex; }
-        .modal-box { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; max-width:520px; width:100%; max-height:90vh; overflow:auto; }
-        .modal-box h3 { margin:0 0 14px 0; font-size:18px; }
-        .field { margin-bottom:12px; }
-        .field label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
-        .field input, .field textarea, .field select { width:100%; }
-        .field textarea { min-height:72px; resize:vertical; }
-        .modal-actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
-        .key-row { align-items:flex-end; }
-        .key-row input[type="password"] { flex:1; min-width:200px; }
-        .key-input { min-width: 220px; }
-        @media (max-width:1100px){ .grid4{grid-template-columns:repeat(2,minmax(0,1fr));} .main{grid-template-columns:1fr;} }
+        /* Fluid shell: full-width within a sensible max, flexible column */
+        .admin-shell.container {
+            width: min(100%, 1680px);
+            max-width: 100%;
+            margin-inline: auto;
+            padding-inline: clamp(12px, 3vw, 28px);
+            box-sizing: border-box;
+            grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+            gap: clamp(12px, 2vw, 24px);
+        }
+
+        .admin-shell .main {
+            padding: clamp(16px, 3vw, 40px);
+            min-width: 0;
+        }
+
+        .admin-shell .page-header {
+            flex-wrap: wrap;
+            gap: clamp(14px, 2vw, 22px);
+            margin-bottom: clamp(20px, 3vw, 35px);
+        }
+
+        .admin-shell .page-header h1 {
+            font-size: clamp(1.35rem, 2.5vw + 0.5rem, 2rem);
+        }
+
+        /* Stats: fluid columns, no horizontal overflow */
+        .admin-shell .stats {
+            gap: clamp(14px, 2.5vw, 30px);
+            margin-bottom: clamp(24px, 4vw, 50px);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+        }
+
+        .admin-shell .dashboard-section {
+            padding: clamp(18px, 2.5vw, 30px);
+            min-width: 0;
+        }
+
+        .admin-shell .topbar {
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: clamp(20px, 3vw, 40px);
+            padding: clamp(12px, 2vw, 15px) clamp(16px, 2.5vw, 30px);
+        }
+
+        .admin-topbar {
+            align-items: center;
+        }
+
+        .admin-menu-btn {
+            display: none;
+            flex-shrink: 0;
+        }
+
+        /* Page-specific layout tweaks (keeps shared `style.css` look, but fits admin tooling) */
+        .admin-toolbar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: flex-end;
+            flex: 1 1 min(100%, 560px);
+            min-width: 0;
+        }
+
+        .admin-toolbar .form-group {
+            margin: 0;
+            min-width: min(100%, 220px);
+            flex: 1 1 200px;
+        }
+
+        .admin-toolbar .form-group label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .admin-key {
+            min-width: min(100%, 260px);
+        }
+
+        .admin-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(16px, 2.5vw, 30px);
+            align-items: start;
+        }
+
+        .admin-chat-box {
+            max-height: min(420px, 50vh);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .admin-activity-list,
+        .admin-table-wrap {
+            max-height: min(420px, 50vh);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Horizontal scroll for wide tables on small screens */
+        .admin-table-host {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
+            margin-inline: calc(-1 * clamp(8px, 2vw, 16px));
+            padding-inline: clamp(8px, 2vw, 16px);
+        }
+
+        .admin-msg {
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .admin-msg b {
+            color: var(--primary-dark);
+        }
+
+        .admin-push-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .admin-span-full {
+            grid-column: span 2;
+        }
+
+        .admin-url-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .admin-url-row input {
+            flex: 1 1 200px;
+            min-width: 0;
+        }
+
+        .admin-chat-toolbar {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .admin-chat-toolbar h3 {
+            margin: 0;
+        }
+
+        .admin-chat-toolbar .form-group {
+            margin: 0;
+            min-width: min(100%, 220px);
+            flex: 1 1 200px;
+        }
+
+        @media (max-width: 480px) {
+            .admin-push-actions .secondary-btn {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-danger:hover {
+            border-color: #f87171;
+            background: #fff1f2;
+        }
+
+        .admin-sidebar-backdrop {
+            display: none;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: clamp(16px, 3vw, 22px);
+            max-width: 560px;
+            width: 100%;
+            max-height: min(90vh, 100dvh - 32px);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-box h3 {
+            margin: 0 0 14px 0;
+            font-size: 18px;
+            color: var(--secondary);
+        }
+
+        body.admin-nav-open {
+            overflow: hidden;
+        }
+
+        @media (min-width: 901px) and (max-width: 1320px) {
+            .admin-grid-3 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .admin-grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .admin-shell.container {
+                display: block;
+                width: 100%;
+            }
+
+            .admin-shell .main {
+                width: 100%;
+            }
+
+            .admin-menu-btn {
+                display: inline-flex;
+            }
+
+            .admin-shell .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: min(280px, 88vw);
+                height: 100dvh;
+                max-height: 100dvh;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                z-index: 2600;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                box-shadow: none;
+            }
+
+            .admin-shell .sidebar.is-open {
+                transform: translateX(0);
+                box-shadow: 8px 0 32px rgba(15, 23, 42, 0.2);
+            }
+
+            .admin-shell .sidebar h2 span,
+            .admin-shell .sidebar li span {
+                display: inline !important;
+            }
+
+            .admin-sidebar-backdrop {
+                display: block;
+                position: fixed;
+                inset: 0;
+                z-index: 2550;
+                background: rgba(15, 23, 42, 0.45);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity 0.2s ease, visibility 0.2s ease;
+            }
+
+            .admin-sidebar-backdrop.is-visible {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
+            .admin-toolbar .form-group,
+            .admin-toolbar .admin-key {
+                min-width: 0;
+                flex: 1 1 auto;
+            }
+
+            .admin-toolbar .primary-btn,
+            .admin-toolbar a.secondary-btn {
+                width: 100%;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .admin-push-form {
+                grid-template-columns: 1fr !important;
+            }
+
+            .admin-span-full {
+                grid-column: span 1;
+            }
+
+            /* Keep search usable on admin (global stylesheet hides it at 768px) */
+            .admin-shell .topbar .search-box {
+                display: block;
+                flex: 1 1 100%;
+                width: 100%;
+                max-width: none;
+                order: 3;
+            }
+
+            .admin-shell .topbar .icons {
+                margin-left: auto;
+            }
+
+            .admin-shell table th,
+            .admin-shell table td {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            .admin-shell .card h3 {
+                font-size: clamp(1.25rem, 5vw, 1.75rem);
+            }
+        }
     </style>
 </head>
+
 <body>
-    <div class="wrap">
-        <div class="top">
-            <div>
-                <div class="title">Vet Connect Admin Panel</div>
-                <div class="small">Monitor users, activities, chats, and products from one dashboard.</div>
-            </div>
-            <div class="row key-row">
-                <select id="api-select">
-                    <option value="http://localhost:3000/api">Local API (http://localhost:3000/api)</option>
-                    <option value="https://farm-ai-iota.vercel.app/api" selected>Production API (farm-ai-iota.vercel.app/api)</option>
-                </select>
-                <input type="password" id="admin-key" class="key-input" placeholder="Admin API key" autocomplete="off">
-                <button class="btn" id="refresh-btn">Refresh Data</button>
-                <a class="btn-outline" href="../conn/admin.html" target="_blank" rel="noopener noreferrer">AgriConnect Admin</a>
-                <a class="btn-outline" href="https://my-farm-ai.vercel.app/admin09890.html" target="_blank" rel="noopener noreferrer">MyFarm AI Admin</a>
-            </div>
-        </div>
+    <div class="admin-sidebar-backdrop" id="admin-sidebar-backdrop" aria-hidden="true"></div>
+    <div class="container admin-shell">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="admin-sidebar" aria-label="Main navigation">
+            <h2 onclick="location.href='index.html'" style="cursor: pointer;"><span>🌱</span> MyFarm-AI</h2>
+            <ul>
+                <li class="active" onclick="location.href='index.html'"><i class="fa fa-chart-line"></i> <span>Dashboard</span></li>
+                <li onclick="location.href='crops.html'"><i class="fa fa-seedling"></i> <span>Crops</span></li>
+                <li onclick="location.href='orders.html'"><i class="fa fa-shopping-cart"></i> <span>Orders</span></li>
+                <li onclick="location.href='market.html'"><i class="fa fa-coins"></i> <span>Market Prices</span></li>
+                <li onclick="location.href='ai-assistant.html'"><i class="fa fa-robot"></i> <span>AI Assistant</span></li>
+                <li onclick="location.href='vet-consultation.html'"><i class="fa fa-user-md"></i> <span>Vet Consultation</span></li>
+                <li onclick="location.href='weather.html'"><i class="fa fa-cloud"></i> <span>Weather</span></li>
+                <li onclick="location.href='analytics.html'"><i class="fa fa-chart-bar"></i> <span>Analytics</span></li>
+                <li onclick="location.href='messages.html'"><i class="fa fa-envelope"></i> <span>Messages</span></li>
+                <li onclick="location.href='settings.html'"><i class="fa fa-cog"></i> <span>Settings</span></li>
+                <li onclick="location.href='notifications.html'"><i class="fa fa-bell"></i> <span>Notifications</span></li>
+            </ul>
+        </aside>
 
-        <section class="grid4">
-            <article class="card"><h3>Total Users</h3><div class="metric" id="m-users">0</div></article>
-            <article class="card"><h3>Active Users</h3><div class="metric" id="m-active">0</div></article>
-            <article class="card"><h3>Total Chats</h3><div class="metric" id="m-messages">0</div></article>
-            <article class="card"><h3>Products</h3><div class="metric" id="m-products">0</div></article>
-        </section>
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Topbar -->
+            <header class="topbar admin-topbar">
+                <button type="button" class="icon-btn admin-menu-btn" id="admin-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="admin-sidebar">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <div class="search-box">
+                    <i class="fa fa-shield-halved"></i>
+                    <input type="search" placeholder="Search admin tools, users, products...">
+                </div>
+                <div class="icons">
+                    <div class="icon-btn" onclick="location.href='notifications.html'"><i class="fa fa-bell"></i><span class="badge">3</span></div>
+                    <div class="icon-btn" onclick="location.href='messages.html'"><i class="fa fa-envelope"></i><span class="badge">5</span></div>
+                    <div class="icon-btn" onclick="location.href='settings.html'"><i class="fa fa-user-circle"></i></div>
+                </div>
+            </header>
 
-        <section class="main">
-            <article class="card">
-                <h2 class="panel-title">Users & Activity</h2>
-                <div class="table-wrap">
+            <div class="page-header">
+                <div>
+                    <h1>Vet Connect Admin</h1>
+                    <p style="margin: 8px 0 0 0; color: var(--text-muted); font-size: 14px;">
+                        Monitor users, chats, marketplace listings, and send push updates — all in one place.
+                    </p>
+                </div>
+
+                <div class="admin-toolbar">
+                    <div class="form-group">
+                        <label for="api-select">API endpoint</label>
+                        <select id="api-select">
+                            <option value="http://localhost:3000/api">Local API (http://localhost:3000/api)</option>
+                            <option value="https://farm-ai-iota.vercel.app/api" selected>Production API (farm-ai-iota.vercel.app/api)</option>
+                        </select>
+                    </div>
+                    <div class="form-group admin-key">
+                        <label for="admin-key">Admin API key</label>
+                        <input type="password" id="admin-key" placeholder="Enter key to enable admin actions" autocomplete="off">
+                    </div>
+                    <button class="primary-btn" type="button" id="refresh-btn"><i class="fa fa-rotate"></i> Refresh Data</button>
+                    <a class="secondary-btn" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none;" href="../conn/admin.html" target="_blank" rel="noopener noreferrer">
+                        <i class="fa fa-up-right-from-square"></i> AgriConnect Admin
+                    </a>
+                    <a class="secondary-btn" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none;" href="https://my-farm-ai.vercel.app/admin09890.html" target="_blank" rel="noopener noreferrer">
+                        <i class="fa fa-up-right-from-square"></i> MyFarm AI Admin
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <section class="stats">
+                <div class="card">
+                    <p><i class="fa fa-users" style="color: var(--primary);"></i> Total Users</p>
+                    <h3 id="m-users">0</h3>
+                    <span class="trend up">Live overview</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-bolt" style="color: var(--accent);"></i> Active Users</p>
+                    <h3 id="m-active">0</h3>
+                    <span class="trend up">Recently seen</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-comments" style="color: #3b82f6;"></i> Total Chats</p>
+                    <h3 id="m-messages">0</h3>
+                    <span class="trend up">Across all users</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-box" style="color: #8b5cf6;"></i> Products</p>
+                    <h3 id="m-products">0</h3>
+                    <span class="trend up">Marketplace listings</span>
+                </div>
+            </section>
+
+            <div class="admin-grid-3">
+                <section class="dashboard-section">
+                    <h3>Users &amp; Activity</h3>
+                    <div class="table-container admin-table-wrap admin-table-host" style="margin: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Conversations</th>
+                                    <th>Messages</th>
+                                    <th>Last Seen</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <div class="admin-chat-toolbar">
+                        <h3>User Chat Monitor</h3>
+                        <div class="form-group">
+                            <label for="chat-user">Select user</label>
+                            <select id="chat-user"></select>
+                        </div>
+                    </div>
+                    <div id="chat-box" class="admin-chat-box">
+                        <div style="color: var(--text-muted); font-size: 13px;">Select a user to view chat messages.</div>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <h3>Recent System Activity</h3>
+                    <div class="admin-activity-list" id="activity-list"></div>
+                </section>
+            </div>
+
+            <section class="dashboard-section" style="margin-top: 30px;">
+                <h3>User Products</h3>
+                <p style="margin: 6px 0 16px 0; color: var(--text-muted); font-size: 14px;">
+                    Send push alerts to all app users for new marketplace updates.
+                </p>
+
+                <div class="admin-push-actions">
+                    <button type="button" class="secondary-btn btn-sm" id="push-new-product"><i class="fa fa-bullhorn"></i> New Product Alert</button>
+                    <button type="button" class="secondary-btn btn-sm" id="push-new-consultant"><i class="fa fa-user-md"></i> New Consultant Alert</button>
+                    <button type="button" class="secondary-btn btn-sm" id="push-test" style="background: transparent;"><i class="fa fa-vial"></i> Test Push</button>
+                </div>
+
+                <div class="form-grid admin-push-form" style="margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label for="push-title">General title</label>
+                        <input type="text" id="push-title" placeholder="Update from MyFarmAI" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="push-body">General message</label>
+                        <input type="text" id="push-body" placeholder="Your update is ready — check the app." autocomplete="off">
+                    </div>
+                    <div class="form-group admin-span-full">
+                        <label for="push-url">URL (optional)</label>
+                        <div class="admin-url-row">
+                            <input type="text" id="push-url" placeholder="/" autocomplete="off">
+                            <button type="button" class="primary-btn btn-sm" id="push-general" style="height: 44px; flex-shrink: 0;"><i class="fa fa-paper-plane"></i> Send General</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container admin-table-host" style="margin: 0;">
                     <table>
                         <thead>
-                            <tr><th>Email</th><th>Conversations</th><th>Messages</th><th>Last Seen</th><th>Actions</th></tr>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Seller</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-                        <tbody id="users-body"></tbody>
+                        <tbody id="products-body"></tbody>
                     </table>
                 </div>
-            </article>
+            </section>
 
-            <article class="card">
-                <div class="row">
-                    <h2 class="panel-title" style="margin:0; flex:1;">User Chat Monitor</h2>
-                    <select id="chat-user"></select>
-                </div>
-                <div id="chat-box" class="chat-box">
-                    <div class="small">Select a user to view chat messages.</div>
-                </div>
-            </article>
-
-            <article class="card">
-                <h2 class="panel-title">Recent System Activity</h2>
-                <div class="list" id="activity-list"></div>
-            </article>
-        </section>
-
-        <section class="card" style="margin-top:14px;">
-            <h2 class="panel-title">User Products</h2>
-            <p class="small" style="margin:-6px 0 12px 0;">Send push alerts to all app users for new marketplace updates.</p>
-            <div class="row" style="margin-bottom: 12px;">
-                <button type="button" class="btn-sm btn-edit" id="push-new-product">New Product Alert</button>
-                <button type="button" class="btn-sm btn-edit" id="push-new-consultant">New Consultant Alert</button>
-                <button type="button" class="btn-sm btn-outline" id="push-test" style="background:transparent;">Test Push</button>
-            </div>
-            <div class="row" style="margin-bottom: 12px; align-items:flex-end;">
-                <div class="field" style="margin:0; flex: 1; min-width: 220px;">
-                    <label for="push-title">General title</label>
-                    <input type="text" id="push-title" placeholder="Update from MyFarmAI" autocomplete="off">
-                </div>
-                <div class="field" style="margin:0; flex: 2; min-width: 260px;">
-                    <label for="push-body">General message</label>
-                    <input type="text" id="push-body" placeholder="Your update is ready — check the app." autocomplete="off">
-                </div>
-                <div class="field" style="margin:0; flex: 1; min-width: 160px;">
-                    <label for="push-url">URL (optional)</label>
-                    <input type="text" id="push-url" placeholder="/" autocomplete="off">
-                </div>
-                <button type="button" class="btn-sm btn-edit" id="push-general" style="height: 40px;">Send General</button>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr><th>Product</th><th>Category</th><th>Price</th><th>Seller</th><th>Created</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="products-body"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <p class="small" id="status-line">Ready.</p>
+            <p style="margin-top: 16px; color: var(--text-muted); font-size: 13px;" id="status-line">Ready.</p>
+        </main>
     </div>
 
     <div id="product-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
@@ -155,37 +554,37 @@
             <h3 id="product-modal-title">Edit product</h3>
             <form id="product-form">
                 <input type="hidden" id="edit-product-id">
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-title">Title</label>
                     <input type="text" id="edit-title" required maxlength="120">
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-category">Category</label>
                     <input type="text" id="edit-category" placeholder="e.g. Produce">
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-price">Price (₦)</label>
                     <input type="number" id="edit-price" min="0" step="1" required>
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-seller-email">Seller email</label>
                     <input type="email" id="edit-seller-email">
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-seller-phone">Seller phone (WhatsApp)</label>
                     <input type="text" id="edit-seller-phone" placeholder="+234…">
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-image">Image URL</label>
                     <input type="url" id="edit-image" placeholder="https://…">
                 </div>
-                <div class="field">
+                <div class="form-group">
                     <label for="edit-description">Description</label>
-                    <textarea id="edit-description"></textarea>
+                    <textarea id="edit-description" style="min-height: 96px;"></textarea>
                 </div>
-                <div class="modal-actions">
-                    <button type="submit" class="btn" id="edit-save-btn">Save changes</button>
-                    <button type="button" class="btn-outline" id="edit-cancel-btn">Cancel</button>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;">
+                    <button type="submit" class="primary-btn" id="edit-save-btn">Save changes</button>
+                    <button type="button" class="secondary-btn" id="edit-cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
@@ -239,7 +638,7 @@
 
         function renderUsers(users) {
             const tbody = el("users-body");
-            tbody.innerHTML = users.length ? "" : `<tr><td colspan="5" class="warn">No users found.</td></tr>`;
+            tbody.innerHTML = users.length ? "" : `<tr><td colspan="5" style="color:#b45309;">No users found.</td></tr>`;
             users.forEach((u) => {
                 const tr = document.createElement("tr");
                 tr.innerHTML =
@@ -247,26 +646,26 @@
                     `<td>${formatN(u.conversations)}</td>` +
                     `<td>${formatN(u.messages)}</td>` +
                     `<td>${formatDate(u.lastSeen)}</td>` +
-                    `<td class="actions"><button class="btn-sm btn-del" data-user-email="${esc(u.email)}">Delete</button></td>`;
+                    `<td><button class="secondary-btn btn-sm btn-danger" data-user-email="${esc(u.email)}">Delete</button></td>`;
                 tbody.appendChild(tr);
             });
         }
 
         function renderProducts(products) {
             const tbody = el("products-body");
-            tbody.innerHTML = products.length ? "" : `<tr><td colspan="6" class="warn">No products found.</td></tr>`;
+            tbody.innerHTML = products.length ? "" : `<tr><td colspan="6" style="color:#b45309;">No products found.</td></tr>`;
             products.forEach((p) => {
                 const tr = document.createElement("tr");
                 const seller = p.sellerEmail || "-";
                 tr.innerHTML =
-                    `<td>${esc(p.title || "Untitled")}</td>` +
-                    `<td><span class="pill">${esc(p.category || "General")}</span></td>` +
+                    `<td style="font-weight:600;">${esc(p.title || "Untitled")}</td>` +
+                    `<td><span class="status-badge pending" style="text-transform:none; letter-spacing:0;">${esc(p.category || "General")}</span></td>` +
                     `<td>${formatMoney(p.price)}</td>` +
                     `<td>${esc(seller)}</td>` +
                     `<td>${formatDate(p.createdAt)}</td>` +
-                    `<td class="actions">` +
-                        `<button class="btn-sm btn-edit" data-product-id="${esc(p.id)}">Edit</button>` +
-                        `<button class="btn-sm btn-del" data-delete-product-id="${esc(p.id)}">Delete</button>` +
+                    `<td>` +
+                        `<button class="secondary-btn btn-sm" data-product-id="${esc(p.id)}" style="margin-right:8px;">Edit</button>` +
+                        `<button class="secondary-btn btn-sm btn-danger" data-delete-product-id="${esc(p.id)}">Delete</button>` +
                     `</td>`;
                 tbody.appendChild(tr);
             });
@@ -404,13 +803,16 @@
             const list = el("activity-list");
             list.innerHTML = "";
             if (!activity.length) {
-                list.innerHTML = `<div class="activity-item warn">No activity yet.</div>`;
+                list.innerHTML = `<div style="padding:10px 0; color:#b45309;">No activity yet.</div>`;
                 return;
             }
             activity.slice(0, 60).forEach((a) => {
                 const div = document.createElement("div");
-                div.className = "activity-item";
-                div.innerHTML = `<div>${a.label}</div><div class="small">${a.email || "system"} - ${formatDate(a.timestamp)}</div>`;
+                div.style.borderBottom = "1px solid var(--border)";
+                div.style.padding = "12px 0";
+                div.innerHTML =
+                    `<div style="font-size:14px; color: var(--secondary); font-weight:600;">${esc(a.label)}</div>` +
+                    `<div style="font-size:12px; color: var(--text-muted); margin-top:4px;">${esc(a.email || "system")} · ${formatDate(a.timestamp)}</div>`;
                 list.appendChild(div);
             });
         }
@@ -433,15 +835,15 @@
             const box = el("chat-box");
             const logs = state.data?.chats?.[email] || [];
             if (!logs.length) {
-                box.innerHTML = `<div class="small">No messages for this user.</div>`;
+                box.innerHTML = `<div style="color: var(--text-muted); font-size: 13px;">No messages for this user.</div>`;
                 return;
             }
             box.innerHTML = "";
             logs.forEach((m) => {
                 const div = document.createElement("div");
                 const safe = (m.content || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                div.className = "m";
-                div.innerHTML = `<b>${m.role}</b>: ${safe}<div class="small">${formatDate(m.timestamp)}</div>`;
+                div.className = "admin-msg";
+                div.innerHTML = `<b>${esc(m.role)}</b>: ${safe}<div style="font-size:12px; color: var(--text-muted); margin-top:4px;">${formatDate(m.timestamp)}</div>`;
                 box.appendChild(div);
             });
         }
@@ -455,7 +857,7 @@
                 renderProducts(data.products || []);
                 renderActivity(data.activity || []);
                 renderChatUsers(data.chats || {});
-                el("status-line").textContent = `Updated ${new Date().toLocaleTimeString()} - value: ${formatMoney(data.summary.marketplaceValue)}`;
+                el("status-line").textContent = `Updated ${new Date().toLocaleTimeString()} - marketplace value: ${formatMoney(data.summary.marketplaceValue)}`;
             } catch (err) {
                 el("status-line").textContent = `Failed to load admin data: ${err.message}`;
             }
@@ -541,7 +943,53 @@
         }
 
         el("admin-key").value = localStorage.getItem("myfarmai_admin_key") || "";
+
+        (function initAdminMobileNav() {
+            const toggle = document.getElementById("admin-nav-toggle");
+            const sidebar = document.getElementById("admin-sidebar");
+            const backdrop = document.getElementById("admin-sidebar-backdrop");
+            if (!toggle || !sidebar || !backdrop) return;
+
+            const mq = window.matchMedia("(max-width: 900px)");
+
+            function closeNav() {
+                sidebar.classList.remove("is-open");
+                backdrop.classList.remove("is-visible");
+                toggle.setAttribute("aria-expanded", "false");
+                toggle.setAttribute("aria-label", "Open menu");
+                document.body.classList.remove("admin-nav-open");
+                backdrop.setAttribute("aria-hidden", "true");
+            }
+
+            function openNav() {
+                sidebar.classList.add("is-open");
+                backdrop.classList.add("is-visible");
+                toggle.setAttribute("aria-expanded", "true");
+                toggle.setAttribute("aria-label", "Close menu");
+                document.body.classList.add("admin-nav-open");
+                backdrop.setAttribute("aria-hidden", "false");
+            }
+
+            toggle.addEventListener("click", () => {
+                if (sidebar.classList.contains("is-open")) closeNav();
+                else openNav();
+            });
+
+            backdrop.addEventListener("click", closeNav);
+
+            sidebar.querySelectorAll("li").forEach((li) => {
+                li.addEventListener("click", () => {
+                    if (mq.matches) closeNav();
+                });
+            });
+
+            window.addEventListener("resize", () => {
+                if (!mq.matches) closeNav();
+            });
+        })();
+
         loadDashboard();
     </script>
 </body>
+
 </html>
