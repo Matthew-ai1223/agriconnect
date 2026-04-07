@@ -957,6 +957,37 @@ window.handleAuthSubmit = async function (e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const authError = document.getElementById('auth-error');
+
+    const setAuthError = (message) => {
+        if (authError) {
+            authError.textContent = message;
+            authError.style.display = message ? 'block' : 'none';
+        }
+    };
+
+    setAuthError('');
+
+    if (!email) {
+        setAuthError('Email is required.');
+        showToast('Email is required.', 'error');
+        return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        setAuthError('Please enter a valid email address.');
+        showToast('Please enter a valid email address.', 'error');
+        return;
+    }
+
+    if (!password || password.length < 6) {
+        const msg = 'Password must be at least 6 characters.';
+        setAuthError(msg);
+        showToast(msg, 'error');
+        return;
+    }
 
     const payload = { email, password, mode: state.authMode };
 
@@ -964,31 +995,39 @@ window.handleAuthSubmit = async function (e) {
         const termsAccept = document.getElementById('terms-accept');
         const consent = document.querySelector('input[name="ai-data-consent"]:checked');
         if (!termsAccept || !termsAccept.checked) {
-            showToast('Please read and accept the Terms & Conditions.', 'error');
+            const msg = 'Please read and accept the Terms & Conditions.';
+            setAuthError(msg);
+            showToast(msg, 'error');
             return;
         }
         if (!consent) {
-            showToast('Please choose Yes or No for using your data to improve our AI.', 'error');
+            const msg = 'Please choose Yes or No for using your data to improve our AI.';
+            setAuthError(msg);
+            showToast(msg, 'error');
             return;
         }
         payload.termsAccepted = true;
         payload.aiDataConsent = consent.value;
     }
 
+    if (submitBtn) submitBtn.disabled = true;
     try {
         const res = await fetch(`${API_BASE}/auth`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
 
         if (!res.ok) {
-            showToast(data.error || 'Authentication failed. Please try again.', 'error');
+            const message = data.error || data.message || 'Authentication failed. Please try again.';
+            setAuthError(message);
+            showToast(message, 'error');
             return;
         }
 
         if (data.success) {
+            setAuthError('');
             state.currentUser = { email: data.email };
             if (data.aiDataConsent === 'yes' || data.aiDataConsent === 'no') {
                 state.currentUser.aiDataConsent = data.aiDataConsent;
@@ -1001,7 +1040,11 @@ window.handleAuthSubmit = async function (e) {
             showToast('Welcome to MyFarmAI!', 'success');
         }
     } catch (err) {
-        showToast('Connection failed. Please check your internet.', 'error');
+        const msg = 'Connection failed. Please check your internet.';
+        setAuthError(msg);
+        showToast(msg, 'error');
+    } finally {
+        if (submitBtn) submitBtn.disabled = false;
     }
 };
 
