@@ -8,8 +8,13 @@ const state = {
     isProductsLoading: true,
     isVetsLoading: true,
     productsLoadFailed: false,
-    vetsLoadFailed: false
+    vetsLoadFailed: false,
+    homeTopProductStart: 0,
+    homeTopVetStart: 0
 };
+
+const HOME_TOP_ROTATION_INTERVAL_MS = 60 * 1000;
+let homeTopRotationTimer = null;
 
 // API: use local backend on localhost (for Cloudinary upload + API during dev)
 const API_BASE =
@@ -227,6 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const notifBtn = document.getElementById('notif-btn');
     if (notifBtn) notifBtn.classList.remove('d-none');
+
+    setupHomeTopRotation();
 });
 
 function hideAppLoader() {
@@ -360,12 +367,45 @@ function renderHomeVetSkeletons() {
     `;
 }
 
+function getRotatingSlice(list, size, startIndex) {
+    const source = Array.isArray(list) ? list : [];
+    if (!source.length || size <= 0) return [];
+    if (source.length <= size) return source.slice();
+    const start = ((startIndex % source.length) + source.length) % source.length;
+    const out = [];
+    for (let i = 0; i < size; i += 1) {
+        out.push(source[(start + i) % source.length]);
+    }
+    return out;
+}
+
+function rotateHomeTopSections() {
+    const productCount = state.products.length;
+    if (productCount > 3) {
+        state.homeTopProductStart = (state.homeTopProductStart + 3) % productCount;
+    }
+
+    const vetCount = state.vets.length;
+    if (vetCount > 3) {
+        state.homeTopVetStart = (state.homeTopVetStart + 3) % vetCount;
+    }
+
+    populateHomeTopProducts();
+    populateVets();
+}
+
+function setupHomeTopRotation() {
+    if (homeTopRotationTimer) clearInterval(homeTopRotationTimer);
+    homeTopRotationTimer = setInterval(rotateHomeTopSections, HOME_TOP_ROTATION_INTERVAL_MS);
+}
+
 async function fetchProducts() {
     try {
         const res = await fetch(`${API_BASE}/products`);
         const data = await res.json();
         if (data.status === 'success') {
             state.products = data.data || [];
+            state.homeTopProductStart = 0;
             state.productsLoadFailed = false;
             rebuildMarketCategoryOptions();
             populateHomeTopProducts();
@@ -391,7 +431,7 @@ function populateHomeTopProducts() {
 
     container.innerHTML = '';
 
-    const list = (state.products || []).slice(0, 4);
+    const list = getRotatingSlice(state.products || [], 3, state.homeTopProductStart);
     if (!list.length) {
         if (state.productsLoadFailed) {
             container.innerHTML =
@@ -498,6 +538,7 @@ async function fetchVets() {
         const data = await res.json();
         if (data.status === 'success') {
             state.vets = data.data;
+            state.homeTopVetStart = 0;
             state.vetsLoadFailed = false;
             populateVets();
         }
@@ -660,7 +701,8 @@ function populateVets() {
         return;
     }
 
-    state.vets.forEach(vet => {
+    const vetsToShow = getRotatingSlice(state.vets, 3, state.homeTopVetStart);
+    vetsToShow.forEach(vet => {
         const spec = vet.specialization || vet.specialty || '';
         const imgSrc = vet.image_url || vet.img || 'https://via.placeholder.com/60';
         const card = document.createElement('div');
