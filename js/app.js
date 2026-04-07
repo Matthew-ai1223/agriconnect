@@ -56,9 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sellImageRemove.addEventListener('click', () => resetSellImageUI());
     }
 
+    // Mobile swipe navigation: disabled to prevent accidental section switches
+    const ENABLE_SWIPE_NAV = false;
+
     // Mobile swipe navigation: swipe left = next section, swipe right = back
     function isMobileSwipeEnabled() {
-        return window.innerWidth < 768;
+        return ENABLE_SWIPE_NAV && window.innerWidth < 768;
     }
 
     function isAnyOverlayOpen() {

@@ -329,13 +329,38 @@
             }
         });
 
-        async function deleteAdminProduct(p) {
-            if (!p || !p.id) return;
-            if (!confirm(`Delete listing "${p.title || p.id}"? This cannot be undone.`)) return;
-            const base = el("api-select").value;
-            el("status-line").textContent = "Deleting…";
+        const deleteLocks = new Set();
+
+        async function runDeleteAction(lockKey, button, action) {
+            if (deleteLocks.has(lockKey)) return;
+            deleteLocks.add(lockKey);
+            const previousText = button ? button.textContent : "";
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Deleting...";
+            }
             try {
-                const res = await fetch(`${base}/admin/products/${encodeURIComponent(p.id)}`, {
+                await action();
+            } finally {
+                deleteLocks.delete(lockKey);
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = previousText || "Delete";
+                }
+            }
+        }
+
+        async function deleteAdminProductById(productId, productTitle, button = null) {
+            const id = String(productId || "").trim();
+            if (!id) {
+                el("status-line").textContent = "Delete failed: missing product id.";
+                return;
+            }
+            if (!confirm(`Delete listing "${productTitle || id}"? This cannot be undone.`)) return;
+            await runDeleteAction(`product:${id}`, button, async () => {
+                const base = el("api-select").value;
+                el("status-line").textContent = "Deleting product…";
+                const res = await fetch(`${base}/admin/products/${encodeURIComponent(id)}`, {
                     method: "DELETE",
                     headers: adminHeaders()
                 });
@@ -345,17 +370,21 @@
                 }
                 el("status-line").textContent = "Product deleted.";
                 await loadDashboard();
-            } catch (err) {
+            }).catch((err) => {
                 el("status-line").textContent = `Delete failed: ${err.message}`;
-            }
+            });
         }
 
-        async function deleteAdminUser(email) {
-            if (!email) return;
+        async function deleteAdminUserByEmail(emailValue, button = null) {
+            const email = String(emailValue || "").trim();
+            if (!email) {
+                el("status-line").textContent = "Delete failed: missing user email.";
+                return;
+            }
             if (!confirm(`Delete user "${email}" and all related data (chats, cart, products)? This cannot be undone.`)) return;
-            const base = el("api-select").value;
-            el("status-line").textContent = "Deleting user…";
-            try {
+            await runDeleteAction(`user:${email.toLowerCase()}`, button, async () => {
+                const base = el("api-select").value;
+                el("status-line").textContent = "Deleting user…";
                 const res = await fetch(`${base}/admin/users/${encodeURIComponent(email)}`, {
                     method: "DELETE",
                     headers: adminHeaders()
@@ -366,9 +395,9 @@
                 }
                 el("status-line").textContent = `User deleted. Removed ${json.deletedProducts || 0} products.`;
                 await loadDashboard();
-            } catch (err) {
+            }).catch((err) => {
                 el("status-line").textContent = `Delete user failed: ${err.message}`;
-            }
+            });
         }
 
         function renderActivity(activity) {
@@ -437,7 +466,7 @@
         el("users-body").addEventListener("click", async (e) => {
             const btn = e.target.closest("button[data-user-email]");
             if (!btn) return;
-            await deleteAdminUser(btn.dataset.userEmail || "");
+            await deleteAdminUserByEmail(btn.dataset.userEmail || "", btn);
         });
 
         el("products-body").addEventListener("click", async (e) => {
@@ -450,8 +479,10 @@
 
             const deleteBtn = e.target.closest("button[data-delete-product-id]");
             if (deleteBtn) {
-                const product = (state.data?.products || []).find((p) => p.id === deleteBtn.dataset.deleteProductId);
-                if (product) await deleteAdminProduct(product);
+                const id = deleteBtn.dataset.deleteProductId || "";
+                const row = deleteBtn.closest("tr");
+                const title = row && row.children[0] ? row.children[0].textContent.trim() : "";
+                await deleteAdminProductById(id, title, deleteBtn);
             }
         });
 
