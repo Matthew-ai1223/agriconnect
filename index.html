@@ -44,11 +44,6 @@
     <header class="header" role="banner">
         <div class="header-inner">
             <div class="logo" aria-label="MyFarmAI home">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.77 10.3-8 10z"></path>
-                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-                </svg>
                 <span class="logo__text">MyFarmAI</span>
             </div>
             <nav class="desktop-nav" aria-label="Primary navigation">
@@ -71,7 +66,7 @@
                 <span class="header-action-btn__text">Cart</span>
                 <span id="cart-count" class="cart-count-pill cart-count-pill--empty" aria-live="polite">0</span>
                 </button>
-
+                 
                 <button type="button" class="header-action-btn header-action-btn--account" id="profile-btn"
                 onclick="showSection('auth')" aria-label="Sign in or create account">
                 <span class="header-action-btn__icon" aria-hidden="true">
@@ -84,8 +79,8 @@
                 <span class="header-action-btn__text">Sign in</span>
                 </button>
 
-                <button type="button" class="header-action-btn header-action-btn--notif d-none" id="notif-btn"
-                onclick="enableNotifications()" aria-label="Enable push notifications">
+                <button type="button" class="header-action-btn header-action-btn--notif fm" id="notif-btn"
+                onclick="enableNotifications()" aria-label="Enable push notifications Toggle menu for alerts">
                 <span class="header-action-btn__icon" aria-hidden="true">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

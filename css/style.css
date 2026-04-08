@@ -156,18 +156,18 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     }
 }
 
-@media (max-width: 320px) {
-    .logo__text {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
+@media (max-width: 320px) { 
+    .logo__text { 
+        position: absolute; 
+        width: 1px; 
+        height: 1px; 
+        padding: 0; 
+        margin: -1px; 
+        overflow: hidden; 
+        clip: rect(0, 0, 0, 0); 
+        white-space: nowrap; 
+        border: 0; 
+    } 
 }
 
 .logo svg {
@@ -316,6 +316,8 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     .header-actions {
         gap: 0.25rem;
     }
+
+
 }
 
 .header-action-btn {
@@ -355,7 +357,7 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     justify-content: center;
     flex-shrink: 0;
 }
-
+ 
 .header-action-btn__text {
     display: none;
     max-width: 7rem;
@@ -374,8 +376,13 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
 
 @media (max-width: 380px) {
     .header-action-btn {
+        display: none;
         padding: 0.4rem 0.5rem;
         min-width: 42px;
+    }
+/* Allow alert button to show on small screens */
+    .fm {
+        display: inline-flex;
     }
 }
 

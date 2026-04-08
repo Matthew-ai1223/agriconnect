@@ -19,22 +19,14 @@ const API_BASE =
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
+     // Check if a section was saved
+    const savedSection = localStorage.getItem('myfarmai_section');
+    const initialSection = savedSection || 'home';
+    
+    showSection(initialSection);
     updateHeaderLayoutOffset();
     window.addEventListener('resize', updateHeaderLayoutOffset);
     window.addEventListener('orientationchange', updateHeaderLayoutOffset);
-
-    // Navigate to Home initially
-    showSection('home');
-    updateAuthUI();
-
-    // Population from Backend
-    fetchProducts();
-    fetchVets();
-    if (state.currentUser) {
-        syncCart();
-    } else {
-        renderCart();
-    }
 
     updateSignupLegalVisibility();
 
@@ -237,17 +229,23 @@ function updateHeaderLayoutOffset() {
 window.showSection = function (sectionId) {
     state.currentSection = sectionId;
 
+    // Save section
+    localStorage.setItem('myfarmai_section', sectionId);
+
+    // Hide all sections
     document.querySelectorAll('main > section').forEach(sec => {
         sec.classList.add('d-none');
         sec.classList.remove('active-section');
     });
 
+    // Show selected section
     const target = document.getElementById(sectionId);
     if (target) {
         target.classList.remove('d-none');
         target.classList.add('active-section');
     }
 
+    // Navigation mapping
     const navMapping = {
         'home': 'Home',
         'ai-chat': 'Ask AI',
