@@ -471,8 +471,15 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
 
 /* On small screens, keep header clean: actions go into menu */
 @media (max-width: 767px) {
-    .header-actions { display: none; }
-    .mobile-nav-btn { margin-left: auto; }
+    .header-inner {
+        justify-content: flex-start;
+        gap: 0.2rem;
+    }
+    .header-actions {
+        margin-left: auto;
+        margin-right: 0.1rem;
+    }
+    .mobile-nav-btn { margin-left: 0; }
 }
 
 @media (min-width: 1024px) {
