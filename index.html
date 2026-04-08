@@ -51,7 +51,7 @@
     <!-- Header -->
     <header class="header" role="banner">
         <div class="header-inner">
-            <div class="logo" aria-label="MyFarmAI home">
+            <div class="logo" aria-label="MyFarmAI home" role="button" tabindex="0" onclick="showSection('home'); return false;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.77 10.3-8 10z"></path>
@@ -59,6 +59,18 @@
                 </svg>
                 <span class="logo__text">MyFarmAI</span>
             </div>
+
+            <button type="button" class="mobile-nav-btn" id="mobile-nav-btn" aria-label="Open menu" aria-controls="mobile-nav-panel" aria-expanded="false" onclick="toggleMobileNav()">
+                <span class="mobile-nav-btn__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </span>
+                <span class="mobile-nav-btn__text">Menu</span>
+            </button>
+
             <nav class="desktop-nav" aria-label="Primary navigation">
                 <a href="#" class="active" onclick="showSection('home'); return false;">Overview</a>
                 <a href="#" onclick="showSection('ai-chat'); return false;">AI Assistant</a>
@@ -113,6 +125,18 @@
                 <button type="button" class="user-chip__logout" onclick="openProfile()" style="margin-left: 0.35rem;">Profile</button>
                 <button type="button" class="user-chip__logout" onclick="handleLogout()">Log out</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile nav panel -->
+        <div class="mobile-nav-panel" id="mobile-nav-panel" role="dialog" aria-label="Menu" aria-modal="true">
+            <div class="mobile-nav-panel__inner">
+                <a href="#" class="mobile-nav-link" onclick="showSection('home'); toggleMobileNav(false); return false;">Overview</a>
+                <a href="#" class="mobile-nav-link" onclick="showSection('ai-chat'); toggleMobileNav(false); return false;">AI Assistant</a>
+                <a href="#" class="mobile-nav-link" onclick="showSection('market'); toggleMobileNav(false); return false;">Marketplace</a>
+                <a href="#" class="mobile-nav-link" onclick="showSection('consult'); toggleMobileNav(false); return false;">Vet Connect</a>
+                <div class="mobile-nav-panel__divider" aria-hidden="true"></div>
+                <a href="#" class="mobile-nav-link" onclick="openProfile(); toggleMobileNav(false); return false;">Profile</a>
             </div>
         </div>
     </header>
