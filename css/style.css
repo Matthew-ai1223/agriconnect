@@ -267,6 +267,21 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     transition: var(--transition-fast);
 }
 
+.mobile-nav-link__lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-nav-link__icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
 .mobile-nav-link:hover {
     background: rgba(16, 185, 129, 0.08);
     color: var(--primary-dark);
@@ -276,6 +291,71 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     height: 1px;
     margin: 0.35rem 0.25rem;
     background: rgba(0, 0, 0, 0.06);
+}
+
+.mobile-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 22px;
+    padding: 0 0.55rem;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--primary-dark);
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+.mobile-nav-pill--muted {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.mobile-user-info {
+    margin: 0.3rem 0.35rem 0.15rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: rgba(16, 185, 129, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.mobile-user-info__avatar {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+.mobile-user-info__meta {
+    min-width: 0;
+    display: grid;
+}
+
+.mobile-user-info__label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.mobile-user-info__email {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #app-content {
@@ -387,6 +467,12 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
 
 @media (max-width: 420px) {
     .mobile-nav-btn__text { display: none; }
+}
+
+/* On small screens, keep header clean: actions go into menu */
+@media (max-width: 767px) {
+    .header-actions { display: none; }
+    .mobile-nav-btn { margin-left: auto; }
 }
 
 @media (min-width: 1024px) {

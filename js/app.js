@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const reg = await navigator.serviceWorker.ready;
             const existing = await reg.pushManager.getSubscription();
             if (existing) {
+                updateNotificationBadge(1);
                 showToast('Notifications already enabled.', 'success');
                 return;
             }
@@ -215,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(subJson.message || 'Could not save subscription.');
             }
 
+            updateNotificationBadge(1);
             showToast('Notifications enabled!', 'success');
         } catch (err) {
             showToast(err.message || 'An error occurred. Please try again.', 'error');
@@ -230,11 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return outputArray;
     }
 
-    const notifBtn = document.getElementById('notif-btn');
-    if (notifBtn) notifBtn.classList.remove('d-none');
+    updateNotificationBadge(Notification.permission === 'granted' ? 1 : 0);
 
     setupHomeTopRotation();
 });
+
+function updateNotificationBadge(count) {
+    const mobileNotifCount = document.getElementById('mobile-notif-count');
+    if (!mobileNotifCount) return;
+    const safeCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    mobileNotifCount.textContent = String(safeCount);
+}
 
 function hideAppLoader() {
     const loader = document.getElementById('app-loader');
@@ -1182,18 +1190,42 @@ function updateAuthUI() {
     const userDisplay = document.getElementById('user-display');
     const userEmailHeader = document.getElementById('user-email-header');
     const avatarEl = document.getElementById('user-avatar-initial');
+    const mobileAuthLink = document.getElementById('mobile-auth-link');
+    const mobileProfileLink = document.getElementById('mobile-profile-link');
+    const mobileLogoutLink = document.getElementById('mobile-logout-link');
+    const mobileUserInfo = document.getElementById('mobile-user-info');
+    const mobileUserEmail = document.getElementById('mobile-user-email');
+    const mobileUserAvatar = document.getElementById('mobile-user-avatar');
 
     if (state.currentUser) {
-        profileBtn.classList.add('d-none');
-        userDisplay.classList.remove('d-none');
-        userDisplay.style.display = '';
+        if (profileBtn) profileBtn.classList.add('d-none');
+        if (userDisplay) {
+            userDisplay.classList.remove('d-none');
+            userDisplay.style.display = '';
+        }
         const local = state.currentUser.email.split('@')[0];
-        userEmailHeader.textContent = local;
+        if (userEmailHeader) userEmailHeader.textContent = local;
         if (avatarEl) avatarEl.textContent = (local.charAt(0) || 'U').toUpperCase();
+
+        if (mobileAuthLink) mobileAuthLink.classList.add('d-none');
+        if (mobileProfileLink) mobileProfileLink.classList.remove('d-none');
+        if (mobileLogoutLink) mobileLogoutLink.classList.remove('d-none');
+        if (mobileUserInfo) mobileUserInfo.classList.remove('d-none');
+        if (mobileUserEmail) mobileUserEmail.textContent = state.currentUser.email;
+        if (mobileUserAvatar) mobileUserAvatar.textContent = (local.charAt(0) || 'U').toUpperCase();
     } else {
-        profileBtn.classList.remove('d-none');
-        userDisplay.classList.add('d-none');
-        userDisplay.style.display = 'none';
+        if (profileBtn) profileBtn.classList.remove('d-none');
+        if (userDisplay) {
+            userDisplay.classList.add('d-none');
+            userDisplay.style.display = 'none';
+        }
+
+        if (mobileAuthLink) mobileAuthLink.classList.remove('d-none');
+        if (mobileProfileLink) mobileProfileLink.classList.add('d-none');
+        if (mobileLogoutLink) mobileLogoutLink.classList.add('d-none');
+        if (mobileUserInfo) mobileUserInfo.classList.add('d-none');
+        if (mobileUserEmail) mobileUserEmail.textContent = '';
+        if (mobileUserAvatar) mobileUserAvatar.textContent = 'U';
     }
     requestAnimationFrame(() => updateHeaderLayoutOffset());
 }
@@ -1389,6 +1421,7 @@ async function syncCart() {
 function renderCart() {
     const list = document.getElementById('cart-items');
     const count = document.getElementById('cart-count');
+    const mobileCount = document.getElementById('mobile-cart-count');
     const totalEl = document.getElementById('cart-total');
     const checkoutBtn = document.getElementById('checkout-btn');
 
@@ -1445,6 +1478,10 @@ function renderCart() {
     if (count) {
         count.textContent = itemCount;
         count.classList.toggle('cart-count-pill--empty', itemCount === 0);
+    }
+    if (mobileCount) {
+        mobileCount.textContent = itemCount;
+        mobileCount.style.display = itemCount === 0 ? 'none' : 'inline-flex';
     }
     if (totalEl) totalEl.textContent = `₦${total.toLocaleString()}`;
     if (checkoutBtn) {

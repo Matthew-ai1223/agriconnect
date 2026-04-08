@@ -60,17 +60,6 @@
                 <span class="logo__text">MyFarmAI</span>
             </div>
 
-            <button type="button" class="mobile-nav-btn" id="mobile-nav-btn" aria-label="Open menu" aria-controls="mobile-nav-panel" aria-expanded="false" onclick="toggleMobileNav()">
-                <span class="mobile-nav-btn__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="4" y1="6" x2="20" y2="6"></line>
-                        <line x1="4" y1="12" x2="20" y2="12"></line>
-                        <line x1="4" y1="18" x2="20" y2="18"></line>
-                    </svg>
-                </span>
-                <span class="mobile-nav-btn__text">Menu</span>
-            </button>
-
             <nav class="desktop-nav" aria-label="Primary navigation">
                 <a href="#" class="active" onclick="showSection('home'); return false;">Overview</a>
                 <a href="#" onclick="showSection('ai-chat'); return false;">AI Assistant</a>
@@ -92,30 +81,6 @@
                 <span id="cart-count" class="cart-count-pill cart-count-pill--empty" aria-live="polite">0</span>
                 </button>
 
-                <button type="button" class="header-action-btn header-action-btn--account" id="profile-btn"
-                onclick="showSection('auth')" aria-label="Sign in or create account">
-                <span class="header-action-btn__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </span>
-                <span class="header-action-btn__text">Sign in</span>
-                </button>
-
-                <button type="button" class="header-action-btn header-action-btn--notif d-none" id="notif-btn"
-                onclick="enableNotifications()" aria-label="Enable push notifications">
-                <span class="header-action-btn__icon" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                </span>
-                <span class="header-action-btn__text">Alerts</span>
-                </button>
-
                 <div id="user-display" class="d-none user-chip" role="status" aria-live="polite">
                 <span class="user-chip__avatar" id="user-avatar-initial" aria-hidden="true">U</span>
                 <div class="user-chip__info">
@@ -126,6 +91,17 @@
                 <button type="button" class="user-chip__logout" onclick="handleLogout()">Log out</button>
                 </div>
             </div>
+
+            <button type="button" class="mobile-nav-btn" id="mobile-nav-btn" aria-label="Open menu" aria-controls="mobile-nav-panel" aria-expanded="false" onclick="toggleMobileNav()">
+                <span class="mobile-nav-btn__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </span>
+                <span class="mobile-nav-btn__text">Menu</span>
+            </button>
         </div>
 
         <!-- Mobile nav panel -->
@@ -136,7 +112,43 @@
                 <a href="#" class="mobile-nav-link" onclick="showSection('market'); toggleMobileNav(false); return false;">Marketplace</a>
                 <a href="#" class="mobile-nav-link" onclick="showSection('consult'); toggleMobileNav(false); return false;">Vet Connect</a>
                 <div class="mobile-nav-panel__divider" aria-hidden="true"></div>
-                <a href="#" class="mobile-nav-link" onclick="openProfile(); toggleMobileNav(false); return false;">Profile</a>
+                <a href="#" class="mobile-nav-link" onclick="toggleCart(); toggleMobileNav(false); return false;">
+                    <span>Cart</span>
+                    <span id="mobile-cart-count" class="mobile-nav-pill" aria-live="polite">0</span>
+                </a>
+                <a href="#" class="mobile-nav-link" id="mobile-notif-link" onclick="enableNotifications(); toggleMobileNav(false); return false;">
+                    <span class="mobile-nav-link__lead">
+                        <span class="mobile-nav-link__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                        </span>
+                        <span>Alerts</span>
+                    </span>
+                    <span id="mobile-notif-count" class="mobile-nav-pill mobile-nav-pill--muted" aria-live="polite">0</span>
+                </a>
+                <div class="mobile-nav-panel__divider" aria-hidden="true"></div>
+                <a href="#" class="mobile-nav-link" id="mobile-auth-link" onclick="showSection('auth'); toggleMobileNav(false); return false;">Sign in</a>
+                <a href="#" class="mobile-nav-link d-none" id="mobile-profile-link" onclick="openProfile(); toggleMobileNav(false); return false;">
+                    <span class="mobile-nav-link__lead">
+                        <span class="mobile-nav-link__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <span>Profile</span>
+                    </span>
+                </a>
+                <a href="#" class="mobile-nav-link d-none" id="mobile-logout-link" onclick="handleLogout(); toggleMobileNav(false); return false;" style="color:#ef4444;">Log out</a>
+                <div id="mobile-user-info" class="mobile-user-info d-none">
+                    <span class="mobile-user-info__avatar" id="mobile-user-avatar">U</span>
+                    <div class="mobile-user-info__meta">
+                        <span class="mobile-user-info__label">Signed in</span>
+                        <span class="mobile-user-info__email" id="mobile-user-email"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
