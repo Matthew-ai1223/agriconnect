@@ -720,18 +720,20 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
     opacity: 0;
     transform: translateZ(0);
     will-change: opacity;
-    animation: hero-ill-cycle 12s infinite;
+    animation: hero-ill-cycle 25s infinite;
 }
 
 .hero-illustration-rotator .hero-ill--1 { animation-delay: 0s; }
-.hero-illustration-rotator .hero-ill--2 { animation-delay: 4s; }
-.hero-illustration-rotator .hero-ill--3 { animation-delay: 8s; }
+.hero-illustration-rotator .hero-ill--2 { animation-delay: 5s; }
+.hero-illustration-rotator .hero-ill--3 { animation-delay: 10s; }
+.hero-illustration-rotator .hero-ill--4 { animation-delay: 15s; }
+.hero-illustration-rotator .hero-ill--5 { animation-delay: 20s; }
 
 @keyframes hero-ill-cycle {
     0% { opacity: 0; }
-    6% { opacity: 1; }
-    27% { opacity: 1; }
-    33% { opacity: 0; }
+    2% { opacity: 1; }
+    16% { opacity: 1; }
+    20% { opacity: 0; }
     100% { opacity: 0; }
 }
 
