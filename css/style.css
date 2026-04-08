@@ -677,8 +677,66 @@ h3 { font-size: clamp(1.25rem, 4vw, 1.75rem); }
 .hero-card__inner {
     position: relative;
     z-index: 1;
-    max-width: 40rem;
+    max-width: 56rem;
     margin-inline: auto;
+}
+
+.hero-card__layout {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 2.75rem);
+    align-items: center;
+    justify-items: center;
+}
+
+.hero-card__copy {
+    width: 100%;
+    max-width: 40rem;
+}
+
+.hero-card__illustration {
+    margin: 0;
+    width: min(100%, 22rem);
+    max-width: 100%;
+    filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.2));
+}
+
+.hero-card__illustration-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+}
+
+@media (min-width: 768px) {
+    .hero-card__layout {
+        grid-template-columns: minmax(0, 1fr) minmax(200px, 280px);
+        justify-items: stretch;
+        align-items: center;
+    }
+
+    .hero-card__copy {
+        justify-self: start;
+        text-align: left;
+        max-width: none;
+    }
+
+    .hero-card__copy .hero-card__eyebrow {
+        margin-inline: 0;
+        justify-content: flex-start;
+    }
+
+    .hero-card__copy .hero-text {
+        margin-inline: 0;
+    }
+
+    .hero-card__copy .hero-card__stats {
+        justify-content: flex-start;
+    }
+
+    .hero-card__illustration {
+        width: 100%;
+        justify-self: end;
+    }
 }
 
 .hero-card__eyebrow {

@@ -37,13 +37,6 @@
         </div>
         <p class="app-loader__text">Loading MyFarmAI...</p>
     </div>
-    <div id="app-loader" class="app-loader" role="status" aria-live="polite" aria-label="Loading MyFarmAI">
-        <div class="app-loader__spinner">
-            <div class="app-loader__ring"></div>
-            <img src="images/icon-512.png" alt="MyFarmAI logo" class="app-loader__logo">
-        </div>
-        <p class="app-loader__text">Loading MyFarmAI...</p>
-    </div>
 
     <!-- SVG Defs for Gradients -->
     <svg width="0" height="0" style="position: absolute;">
@@ -131,27 +124,67 @@
             <div class="hero-card" role="banner">
                 <div class="hero-card__ambient" aria-hidden="true"></div>
                 <div class="hero-card__inner">
-                    <p class="hero-card__eyebrow">
-                        <span class="hero-card__eyebrow-dot" aria-hidden="true"></span>
-                        AI guidance · Trade · Veterinary care
-                    </p>
-                    <h1 class="hero-card__headline">
-                        Farm smarter,<br>
-                        <span class="hero-card__headline-accent">not harder</span>
-                    </h1>
-                    <p class="hero-text">Practical answers for crops and livestock, a direct marketplace for inputs and
-                        produce, and access to certified vets—one calm, fast experience built for working farms.</p>
-                    <ul class="hero-card__stats" aria-label="What you get">
-                        <li><strong>Instant</strong> AI answers</li>
-                        <li><strong>Trusted</strong> peer trade</li>
-                        <li><strong>Live</strong> vet consults</li>
-                    </ul>
-                    <!-- <div class="hero-card__actions">
-                        <button type="button" class="hero-card__btn hero-card__btn--primary"
-                            onclick="showSection('ai-chat'); return false;">Open AI Assistant</button>
-                        <button type="button" class="hero-card__btn hero-card__btn--ghost"
-                            onclick="showSection('market'); return false;">Browse marketplace</button>
-                    </div> -->
+                    <div class="hero-card__layout">
+                        <div class="hero-card__copy">
+                            <p class="hero-card__eyebrow">
+                                <span class="hero-card__eyebrow-dot" aria-hidden="true"></span>
+                                AI guidance · Trade · Veterinary care
+                            </p>
+                            <h1 class="hero-card__headline">
+                                Farm smarter,<br>
+                                <span class="hero-card__headline-accent">not harder</span>
+                            </h1>
+                            <p class="hero-text">Practical answers for crops and livestock, a direct marketplace for inputs and
+                                produce, and access to certified vets - one calm, fast experience built for working farms.</p>
+                            <ul class="hero-card__stats" aria-label="What you get">
+                                <li><strong>Instant</strong> AI answers</li>
+                                <li><strong>Trusted</strong> peer trade</li>
+                                <li><strong>Live</strong> vet consults</li>
+                            </ul>
+                            <!-- <div class="hero-card__actions">
+                                <button type="button" class="hero-card__btn hero-card__btn--primary"
+                                    onclick="showSection('ai-chat'); return false;">Open AI Assistant</button>
+                                <button type="button" class="hero-card__btn hero-card__btn--ghost"
+                                    onclick="showSection('market'); return false;">Browse marketplace</button>
+                            </div> -->
+                        </div>
+                        <figure class="hero-card__illustration">
+                            <svg class="hero-card__illustration-svg" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="hero-illustration-title">
+                                <title id="hero-illustration-title">Stylized farm landscape with fields, barn, and sun</title>
+                                <defs>
+                                    <linearGradient id="hero-ill-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0.35)" />
+                                        <stop offset="100%" stop-color="rgba(255,255,255,0.02)" />
+                                    </linearGradient>
+                                    <linearGradient id="hero-ill-hill" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0.14)" />
+                                        <stop offset="100%" stop-color="rgba(255,255,255,0.06)" />
+                                    </linearGradient>
+                                </defs>
+                                <rect width="400" height="140" fill="url(#hero-ill-sky)" rx="12" />
+                                <circle cx="318" cy="52" r="32" fill="rgba(254,243,199,0.45)" />
+                                <circle cx="318" cy="52" r="22" fill="rgba(251,191,36,0.55)" />
+                                <path d="M0 200 Q80 165 160 178 T320 172 Q360 168 400 182 L400 280 L0 280 Z" fill="url(#hero-ill-hill)" />
+                                <path d="M0 215 Q120 195 240 208 T400 198 L400 280 L0 280 Z" fill="rgba(6,78,59,0.35)" />
+                                <g fill="rgba(255,255,255,0.2)">
+                                    <ellipse cx="72" cy="228" rx="38" ry="8" />
+                                    <ellipse cx="200" cy="238" rx="42" ry="9" />
+                                    <ellipse cx="312" cy="232" rx="36" ry="7" />
+                                </g>
+                                <path d="M268 168 L268 128 L298 148 L268 168 Z" fill="rgba(255,255,255,0.85)" />
+                                <rect x="252" y="148" width="36" height="52" rx="3" fill="rgba(255,255,255,0.92)" />
+                                <rect x="258" y="156" width="10" height="10" rx="1" fill="rgba(6,78,59,0.35)" />
+                                <rect x="272" y="156" width="10" height="10" rx="1" fill="rgba(6,78,59,0.35)" />
+                                <path d="M248 200 L292 200 L292 204 L248 204 Z" fill="rgba(255,255,255,0.5)" />
+                                <g stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-linecap="round" fill="none">
+                                    <path d="M48 210 L48 248 M32 230 L64 230" />
+                                    <path d="M128 218 L128 252 M114 236 L142 236" />
+                                </g>
+                                <circle cx="48" cy="210" r="6" fill="rgba(16,185,129,0.9)" />
+                                <circle cx="128" cy="218" r="5" fill="rgba(52,211,153,0.95)" />
+                            </svg>
+                        </figure>
+                    </div>
                 </div>
             </div>
 
