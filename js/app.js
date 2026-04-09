@@ -16,6 +16,23 @@ const state = {
 const HOME_TOP_ROTATION_INTERVAL_MS = 60 * 1000;
 let homeTopRotationTimer = null;
 const SECTION_STORAGE_KEY = 'myfarmai_active_section';
+const PLATFORM_PERCENT_FEE = 0.05;
+const PLATFORM_FIXED_FEE = 100;
+
+function toSafePrice(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? Math.max(0, n) : 0;
+}
+
+function getPlatformCharge(basePrice) {
+    const safeBase = toSafePrice(basePrice);
+    return Math.round(safeBase * PLATFORM_PERCENT_FEE + PLATFORM_FIXED_FEE);
+}
+
+function getFinalPriceWithCharge(basePrice) {
+    const safeBase = toSafePrice(basePrice);
+    return Math.round(safeBase + getPlatformCharge(safeBase));
+}
 
 // API: use local backend on localhost (for Cloudinary upload + API during dev)
 const API_BASE =
@@ -542,7 +559,7 @@ function populateHomeTopProducts() {
         const titleSafe = escapeHtml(product.title);
         const catSafe = escapeHtml(product.category || '');
         details.innerHTML = `
-            <div class="product-price">₦${Number(product.price).toLocaleString()}</div>
+            <div class="product-price">₦${getFinalPriceWithCharge(product.price).toLocaleString()}</div>
             <div class="text-sm mb-1" style="font-weight:600; font-size:0.95rem;">${titleSafe}</div>
             <div class="text-xs text-muted mb-2">${catSafe}</div>
         `;
@@ -676,7 +693,7 @@ function populateMarketplace(products) {
 
         details.innerHTML = `
             ${headerHtml}
-            <div class="product-price">₦${Number(product.price).toLocaleString()}</div>
+            <div class="product-price">₦${getFinalPriceWithCharge(product.price).toLocaleString()}</div>
             <div class="text-sm mb-1" style="font-weight:600;">${titleSafe}</div>
             <div class="text-xs text-muted mb-2">${catSafe}</div>
             ${descSnippet ? `<div class="text-xs text-muted mb-2" style="line-height:1.4;">${descSnippet}</div>` : ''}
@@ -1453,7 +1470,8 @@ function renderCart() {
         state.cart.forEach((item) => {
             const product = item.product;
             const pid = item.productId;
-            total += product.price * item.quantity;
+            const finalUnitPrice = getFinalPriceWithCharge(product.price);
+            total += finalUnitPrice * item.quantity;
             itemCount += item.quantity;
 
             const div = document.createElement('div');
@@ -1462,7 +1480,7 @@ function renderCart() {
                 <img class="cart-line__img" src="${product.image || 'images/maize.png'}" alt="">
                 <div class="cart-line__meta">
                     <div style="font-weight: 600; font-size: 0.95rem;">${escapeHtml(product.title)}</div>
-                    <div style="color: var(--primary); font-size: 0.85rem; margin-top: 0.25rem;">₦${Number(product.price).toLocaleString()} × ${item.quantity}</div>
+                    <div style="color: var(--primary); font-size: 0.85rem; margin-top: 0.25rem;">₦${finalUnitPrice.toLocaleString()} × ${item.quantity}</div>
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap;">
                         <button type="button" class="btn btn-outline cart-qty-btn" data-act="dec" data-pid="${pid}" style="padding: 0.25rem 0.55rem; min-width: 2rem; font-size: 1rem; line-height: 1;" aria-label="Decrease quantity">−</button>
                         <span style="font-weight: 700; min-width: 1.5rem; text-align: center;">${item.quantity}</span>
@@ -1556,7 +1574,8 @@ window.handleCheckout = function () {
         let sub = 0;
         const lines = state.cart.map((item) => {
             const p = item.product;
-            const line = Number(p.price) * item.quantity;
+            const unitWithCharge = getFinalPriceWithCharge(p.price);
+            const line = unitWithCharge * item.quantity;
             sub += line;
             return `<div class="checkout-summary__line"><span>${escapeHtml(p.title)} × ${item.quantity}</span><span>₦${line.toLocaleString()}</span></div>`;
         });
