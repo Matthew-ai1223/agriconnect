@@ -458,6 +458,16 @@
                     <h3 id="m-products">0</h3>
                     <span class="trend up">Marketplace listings</span>
                 </div>
+                <div class="card">
+                    <p><i class="fa fa-receipt" style="color: #0ea5e9;"></i> Orders</p>
+                    <h3 id="m-orders">0</h3>
+                    <span class="trend up">Checkout volume</span>
+                </div>
+                <div class="card">
+                    <p><i class="fa fa-wallet" style="color: #10b981;"></i> Paid Revenue</p>
+                    <h3 id="m-paid-revenue">N0</h3>
+                    <span class="trend up">Verified Paystack payments</span>
+                </div>
             </section>
 
             <div class="admin-grid-3">
@@ -499,6 +509,27 @@
             </div>
 
             <section class="dashboard-section" style="margin-top: 30px;">
+                <h3>Recent Orders</h3>
+                <p style="margin: 6px 0 16px 0; color: var(--text-muted); font-size: 14px;">
+                    Seller payout starts after successful payment and delivery confirmation. Best delivery model is seller-to-buyer delivery.
+                </p>
+                <div class="table-container admin-table-host" style="margin: 0 0 24px 0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Buyer</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Delivery</th>
+                                <th>Seller Payout Note</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-body"></tbody>
+                    </table>
+                </div>
+
                 <h3>User Products</h3>
                 <p style="margin: 6px 0 16px 0; color: var(--text-muted); font-size: 14px;">
                     Send push alerts to all app users for new marketplace updates.
@@ -634,6 +665,8 @@
             el("m-active").textContent = formatN(summary.activeUsers);
             el("m-messages").textContent = formatN(summary.messages);
             el("m-products").textContent = formatN(summary.products);
+            el("m-orders").textContent = formatN(summary.orders || 0);
+            el("m-paid-revenue").textContent = formatMoney(summary.paidRevenue || 0);
         }
 
         function renderUsers(users) {
@@ -667,6 +700,23 @@
                         `<button class="secondary-btn btn-sm" data-product-id="${esc(p.id)}" style="margin-right:8px;">Edit</button>` +
                         `<button class="secondary-btn btn-sm btn-danger" data-delete-product-id="${esc(p.id)}">Delete</button>` +
                     `</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderOrders(orders) {
+            const tbody = el("orders-body");
+            tbody.innerHTML = orders.length ? "" : `<tr><td colspan="7" style="color:#b45309;">No orders found.</td></tr>`;
+            orders.forEach((o) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML =
+                    `<td style="font-weight:600;">${esc((o.id || "").slice(0, 8))}</td>` +
+                    `<td>${esc(o.buyerEmail || "-")}</td>` +
+                    `<td>${formatMoney(o.total)}</td>` +
+                    `<td>${esc(o.paymentStatus || "initialized")}</td>` +
+                    `<td>${esc(o.deliveryOptionLabel || "Seller delivers to buyer")}</td>` +
+                    `<td>${esc(o.payoutNotice || "Seller payout is released after delivery confirmation.")}</td>` +
+                    `<td>${formatDate(o.createdAt)}</td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -855,6 +905,7 @@
                 renderMetrics(data.summary);
                 renderUsers(data.users || []);
                 renderProducts(data.products || []);
+                renderOrders(data.orders || []);
                 renderActivity(data.activity || []);
                 renderChatUsers(data.chats || {});
                 el("status-line").textContent = `Updated ${new Date().toLocaleTimeString()} - marketplace value: ${formatMoney(data.summary.marketplaceValue)}`;

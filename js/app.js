@@ -1546,8 +1546,10 @@ window.handleCheckout = function () {
     }
     const phoneEl = document.getElementById('checkout-phone');
     const notesEl = document.getElementById('checkout-notes');
+    const deliveryOptEl = document.getElementById('checkout-delivery-option');
     if (phoneEl) phoneEl.value = '';
     if (notesEl) notesEl.value = '';
+    if (deliveryOptEl) deliveryOptEl.value = 'seller_delivery';
 
     const summaryEl = document.getElementById('checkout-summary');
     if (summaryEl) {
@@ -1576,31 +1578,75 @@ window.submitCheckout = async function (e) {
 
     const phone = document.getElementById('checkout-phone').value.trim();
     const notes = document.getElementById('checkout-notes').value.trim();
+    const deliveryOption = document.getElementById('checkout-delivery-option')?.value || 'seller_delivery';
     const btn = document.getElementById('checkout-submit-btn');
+    const originalBtnText = btn ? btn.textContent : '';
     if (btn) btn.disabled = true;
 
     try {
-        const res = await fetch(`${API_BASE}/checkout`, {
+        const initRes = await fetch(`${API_BASE}/checkout/initialize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 email: state.currentUser.email,
                 deliveryPhone: phone,
+                deliveryOption,
                 notes
             })
         });
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error(data.error || data.message || 'Checkout failed');
+        const initData = await initRes.json().catch(() => ({}));
+        if (!initRes.ok || initData.status !== 'success' || !initData.data?.paystack) {
+            throw new Error(initData.error || initData.message || 'Could not start checkout');
         }
-        closeModal('checkout-modal');
-        const oid = data.data && data.data.orderId ? data.data.orderId : '';
-        showToast(oid ? `Order placed! ID: ${oid.slice(0, 8)}…` : 'Order placed successfully!', 'success');
-        await syncCart();
+
+        const paystack = initData.data.paystack;
+        if (!window.PaystackPop || !paystack.publicKey || !paystack.reference) {
+            throw new Error('Paystack checkout is unavailable at the moment.');
+        }
+
+        await new Promise((resolve, reject) => {
+            const handler = window.PaystackPop.setup({
+                key: paystack.publicKey,
+                email: state.currentUser.email,
+                amount: paystack.amountKobo,
+                ref: paystack.reference,
+                callback: async function (response) {
+                    try {
+                        const verifyRes = await fetch(`${API_BASE}/checkout/verify`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ reference: response.reference })
+                        });
+                        const verifyData = await verifyRes.json().catch(() => ({}));
+                        if (!verifyRes.ok || verifyData.status !== 'success') {
+                            throw new Error(verifyData.error || verifyData.message || 'Payment verification failed');
+                        }
+
+                        closeModal('checkout-modal');
+                        const orderId = verifyData.data?.orderId || '';
+                        const deliveryLabel = verifyData.data?.sellerGuidance?.selectedDeliveryLabel || 'Seller delivers to buyer';
+                        const payoutNote = verifyData.data?.sellerGuidance?.payout || 'Seller payout follows delivery confirmation.';
+                        showToast(orderId ? `Payment successful. Order ${orderId.slice(0, 8)} confirmed.` : 'Payment successful.', 'success');
+                        showToast(`Delivery: ${deliveryLabel}. ${payoutNote}`, 'info');
+                        await syncCart();
+                        resolve();
+                    } catch (err) {
+                        reject(err);
+                    }
+                },
+                onClose: function () {
+                    reject(new Error('Payment was cancelled before completion.'));
+                }
+            });
+            handler.openIframe();
+        });
     } catch (err) {
         showToast(err.message || 'Could not place order.', 'error');
     } finally {
-        if (btn) btn.disabled = false;
+        if (btn) {
+            btn.disabled = false;
+            if (originalBtnText) btn.textContent = originalBtnText;
+        }
     }
 };
 
