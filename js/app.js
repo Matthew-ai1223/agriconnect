@@ -15,6 +15,7 @@ const state = {
 
 const HOME_TOP_ROTATION_INTERVAL_MS = 60 * 1000;
 let homeTopRotationTimer = null;
+const SECTION_STORAGE_KEY = 'myfarmai_active_section';
 
 // API: use local backend on localhost (for Cloudinary upload + API during dev)
 const API_BASE =
@@ -28,8 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateHeaderLayoutOffset);
     window.addEventListener('orientationchange', updateHeaderLayoutOffset);
 
-    // Navigate to Home initially
-    showSection('home');
+    // Restore section on refresh (hash first, then saved section)
+    const hashSection = (window.location.hash || '').replace(/^#/, '').trim();
+    const savedSection = localStorage.getItem(SECTION_STORAGE_KEY) || '';
+    const initialSection = hashSection || savedSection || 'home';
+    showSection(initialSection, { skipScroll: true });
     updateAuthUI();
 
     // Population from Backend
@@ -262,8 +266,18 @@ function updateHeaderLayoutOffset() {
 }
 
 // Navigation Logic
-window.showSection = function (sectionId) {
-    state.currentSection = sectionId;
+window.showSection = function (sectionId, options = {}) {
+    const opts = options || {};
+    const fallbackSection = 'home';
+    const targetExists = Boolean(sectionId && document.getElementById(sectionId));
+    const nextSection = targetExists ? sectionId : fallbackSection;
+
+    state.currentSection = nextSection;
+    localStorage.setItem(SECTION_STORAGE_KEY, nextSection);
+
+    if (window.location.hash !== `#${nextSection}`) {
+        history.replaceState(null, '', `#${nextSection}`);
+    }
 
     // Close mobile menu on navigation
     if (typeof window.toggleMobileNav === 'function') {
@@ -275,7 +289,7 @@ window.showSection = function (sectionId) {
         sec.classList.remove('active-section');
     });
 
-    const target = document.getElementById(sectionId);
+    const target = document.getElementById(nextSection);
     if (target) {
         target.classList.remove('d-none');
         target.classList.add('active-section');
@@ -308,12 +322,14 @@ window.showSection = function (sectionId) {
     // Desktop Nav
     document.querySelectorAll('.desktop-nav a').forEach(link => {
         link.classList.remove('active');
-        if (link.textContent === navMapping[sectionId]) {
+        if (link.textContent === navMapping[nextSection]) {
             link.classList.add('active');
         }
     });
 
-    window.scrollTo(0, 0);
+    if (!opts.skipScroll) {
+        window.scrollTo(0, 0);
+    }
 };
 
 // Mobile nav (small screens)
