@@ -441,8 +441,8 @@
                     <div class="form-group">
                         <label for="api-select">API endpoint</label>
                         <select id="api-select">
-                            <option value="http://localhost:3000/api">Local API (http://localhost:3000/api)</option>
-                            <option value="https://farm-ai-iota.vercel.app/api" selected>Production API (farm-ai-iota.vercel.app/api)</option>
+                            <option value="http://localhost:3000/api" selected>Local API (http://localhost:3000/api)</option>
+                            <option value="https://farm-ai-iota.vercel.app/api">Production API (farm-ai-iota.vercel.app/api)</option>
                         </select>
                     </div>
                     <div class="form-group admin-key">
@@ -823,7 +823,11 @@
         const deleteLocks = new Set();
 
         async function runDeleteAction(lockKey, button, action) {
-            if (deleteLocks.has(lockKey)) return;
+            console.log(`[Admin] Starting delete action for lock: ${lockKey}`);
+            if (deleteLocks.has(lockKey)) {
+                console.warn(`[Admin] Action already locked for: ${lockKey}`);
+                return;
+            }
             deleteLocks.add(lockKey);
             const status = el("status-line");
             const previousText = button ? button.innerHTML : "Delete";
@@ -832,8 +836,11 @@
                 button.innerHTML = `<span class="spinner"></span>Deleting...`;
             }
             try {
-                status.className = "status-msg loading";
+                if (status) status.className = "status-msg loading";
                 await action();
+            } catch (err) {
+                console.error(`[Admin] Action failed for ${lockKey}:`, err);
+                throw err;
             } finally {
                 deleteLocks.delete(lockKey);
                 if (button) {
@@ -876,11 +883,25 @@
             const email = String(emailValue || "").trim();
             const status = el("status-line");
             if (!email) {
-                status.className = "status-msg error";
-                status.textContent = "Delete failed: missing user email.";
+                if (status) status.className = "status-msg error";
+                if (status) status.textContent = "Delete failed: missing user email.";
                 return;
             }
+
+            // Pre-flight check for key
+            try {
+                getAdminKey();
+            } catch (kErr) {
+                if (status) {
+                    status.className = "status-msg error";
+                    status.textContent = kErr.message;
+                }
+                alert(kErr.message);
+                return;
+            }
+
             if (!confirm(`Delete user "${email}" and all related data (chats, cart, products)? This cannot be undone.`)) return;
+            
             await runDeleteAction(`user:${email.toLowerCase()}`, button, async () => {
                 const base = el("api-select").value;
                 status.textContent = "Deleting user…";
