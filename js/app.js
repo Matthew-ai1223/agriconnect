@@ -1695,35 +1695,37 @@ window.submitCheckout = async function (e) {
                 email: state.currentUser.email,
                 amount: paystack.amountKobo,
                 ref: paystack.reference,
-                callback: async function (response) {
-                    try {
-                        setCheckoutSubmitting(true, 'Verifying payment...');
-                        showToast('Payment received. Verifying transaction...', 'info');
-                        const verifyRes = await fetch(`${API_BASE}/checkout/verify`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ reference: response.reference })
-                        });
-                        const verifyData = await verifyRes.json().catch(() => ({}));
-                        if (!verifyRes.ok || verifyData.status !== 'success') {
-                            throw new Error(verifyData.error || verifyData.message || 'Payment verification failed');
-                        }
+                callback: function (response) {
+                    (async () => {
+                        try {
+                            setCheckoutSubmitting(true, 'Verifying payment...');
+                            showToast('Payment received. Verifying transaction...', 'info');
+                            const verifyRes = await fetch(`${API_BASE}/checkout/verify`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ reference: response.reference })
+                            });
+                            const verifyData = await verifyRes.json().catch(() => ({}));
+                            if (!verifyRes.ok || verifyData.status !== 'success') {
+                                throw new Error(verifyData.error || verifyData.message || 'Payment verification failed');
+                            }
 
-                        closeModal('checkout-modal');
-                        const orderId = verifyData.data?.orderId || '';
-                        const deliveryLabel = verifyData.data?.sellerGuidance?.selectedDeliveryLabel || 'Seller delivers to buyer';
-                        const payoutNote = verifyData.data?.sellerGuidance?.payout || 'Seller payout follows delivery confirmation.';
-                        const sellerEmailSent = Number(verifyData.data?.sellerEmailNotifications?.sent || 0);
-                        showToast(orderId ? `Payment successful. Order ${orderId.slice(0, 8)} confirmed.` : 'Payment successful.', 'success');
-                        showToast(`Delivery: ${deliveryLabel}. ${payoutNote}`, 'info');
-                        if (sellerEmailSent > 0) {
-                            showToast(`Seller email notifications sent: ${sellerEmailSent}.`, 'success');
+                            closeModal('checkout-modal');
+                            const orderId = verifyData.data?.orderId || '';
+                            const deliveryLabel = verifyData.data?.sellerGuidance?.selectedDeliveryLabel || 'Seller delivers to buyer';
+                            const payoutNote = verifyData.data?.sellerGuidance?.payout || 'Seller payout follows delivery confirmation.';
+                            const sellerEmailSent = Number(verifyData.data?.sellerEmailNotifications?.sent || 0);
+                            showToast(orderId ? `Payment successful. Order ${orderId.slice(0, 8)} confirmed.` : 'Payment successful.', 'success');
+                            showToast(`Delivery: ${deliveryLabel}. ${payoutNote}`, 'info');
+                            if (sellerEmailSent > 0) {
+                                showToast(`Seller email notifications sent: ${sellerEmailSent}.`, 'success');
+                            }
+                            await syncCart();
+                            resolve();
+                        } catch (err) {
+                            reject(err);
                         }
-                        await syncCart();
-                        resolve();
-                    } catch (err) {
-                        reject(err);
-                    }
+                    })();
                 },
                 onClose: function () {
                     reject(new Error('Payment was cancelled before completion.'));
