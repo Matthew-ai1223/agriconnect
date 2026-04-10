@@ -850,7 +850,7 @@
                 if (!res.ok || json.status !== "success") {
                     throw new Error(json.error || json.message || `HTTP ${res.status}`);
                 }
-                el("status-line").textContent = `User deleted. Removed ${json.deletedProducts || 0} products.`;
+                el("status-line").textContent = json.message || "User and related data deleted.";
                 await loadDashboard();
             }).catch((err) => {
                 el("status-line").textContent = `Delete user failed: ${err.message}`;
